@@ -1,0 +1,45 @@
+{% block styles %}
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .vertical-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 15%;
+            background-color: #43A4CE;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .vertical-menu a {
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .vertical-menu a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            margin-left: 15%;
+            padding: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="vertical-menu">
+        <img class="mt-3 p-2" width="85%" src="{{ asset('img/LogoWeiss.png') }}">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </div>
+{% endblock %}

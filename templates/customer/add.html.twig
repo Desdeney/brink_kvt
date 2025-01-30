@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kunden anlegen{% endblock %}
+
+{% block body %}
+    {{ form_start(customer) }}
+    <div class="container d-flex flex-column">
+        <h2>Kunden Daten</h2>
+        <div class="d-flex flex-row mb-3">
+            <div class="d-flex flex-column pe-4">
+                {{ form_label(customer.prename) }}
+                {{ form_widget(customer.prename) }}
+            </div>
+            <div class="d-flex flex-column">
+                {{ form_label(customer.lastname) }}
+                {{ form_widget(customer.lastname) }}
+            </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+            <div class="d-flex flex-column pe-4">
+                {{ form_label(customer.street) }}
+                {{ form_widget(customer.street) }}
+            </div>
+            <div class="d-flex flex-column">
+                {{ form_label(customer.housenr) }}
+                {{ form_widget(customer.housenr) }}
+            </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+            <div class="d-flex flex-column pe-4">
+                {{ form_label(customer.postal) }}
+                {{ form_widget(customer.postal) }}
+            </div>
+            <div class="d-flex flex-column">
+                {{ form_label(customer.city) }}
+                {{ form_widget(customer.city) }}
+            </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+            <div class="d-flex flex-column pe-4">
+                {{ form_label(customer.email) }}
+                {{ form_widget(customer.email) }}
+            </div>
+            <div class="d-flex flex-column">
+                {{ form_label(customer.phone) }}
+                {{ form_widget(customer.phone) }}
+            </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+            <div class="d-flex flex-column pe-4">
+                {{ form_label(customer.payment) }}
+                <div class="d-flex flex-row gap-4">
+                    {{ form_widget(customer.payment) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row mb-3">
+                <div class="d-flex flex-row gap-4">
+                    <div>
+                        {{ form_widget(customer.require_cash) }}
+                        {{ form_label(customer.require_cash) }}
+                    </div>
+                    <div>
+                        {{ form_widget(customer.require_prepaid) }}
+                        {{ form_label(customer.require_prepaid) }}
+                    </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+            {{ form_widget(customer.save) }}
+        </div>
+    </div>
+    {{ form_end(customer) }}
+{% endblock %}

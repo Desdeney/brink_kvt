@@ -1,0 +1,36 @@
+input[type="text"] {
+    background-color: #EFEFEF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 8px;
+}
+
+input[type="email"] {
+    background-color: #EFEFEF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 8px;
+}
+
+button[type="submit"] {
+    background-color: #43A4CE;
+    border: none;
+    padding: 8px 16px;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+button[type="submit"]:hover{
+    background-color: #3691B7;
+}
+
+select {
+    background-color: #EFEFEF;
+    border: none;
+    border-radius: 8px;
+    padding: 16px; /* Optional: für mehr Platz */
+    font-size: 16px; /* Optional: für Textgröße */
+    appearance: none;
+    outline: none; /* Entfernt die Fokuskontur */
+}
