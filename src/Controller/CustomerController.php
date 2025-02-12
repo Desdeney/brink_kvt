@@ -3,47 +3,68 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
-use App\Form\CustomerType;
+use App\Form\Customer1Type;
 use App\Repository\CustomerRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/customer')]
 final class CustomerController extends AbstractController
 {
-    #[Route('/customer', name: 'app_customer')]
-    public function index(CustomerRepository $cr): Response
+    #[Route(name: 'app_customer_index', methods: ['GET'])]
+    public function index(CustomerRepository $customerRepository): Response
     {
-        $customers = $cr->findAll();
-
-
         return $this->render('customer/index.html.twig', [
-            'customers' => $customers,
+            'customers' => $customerRepository->findAll(),
         ]);
     }
 
-    #[Route('/customer/add', name: 'customer_add')]
-    public function add(Request $request, ManagerRegistry $doctrine): Response
+    #[Route('/new', name: 'app_customer_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $customer = new Customer();
-        $form = $this->createForm(CustomerType::class, $customer);
+        $form = $this->createForm(Customer1Type::class, $customer);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $doctrine->getManager();
-            $em->persist($customer);
-            $em->flush();
+            $entityManager->persist($customer);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('app_customer');
+            return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        return $this->render('customer/new.html.twig', [
+            'customer' => $customer,
+            'form' => $form,
+        ]);
+    }
 
+    #[Route('/{id}', name: 'app_customer_show', methods: ['GET'])]
+    public function show(Customer $customer): Response
+    {
+        return $this->render('customer/show.html.twig', [
+            'customer' => $customer,
+        ]);
+    }
 
-        return $this->render('customer/add.html.twig', [
-            'controller_name' => 'CustomerController',
-            'customer' => $form->createView(),
+    #[Route('/{id}/edit', name: 'app_customer_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(Customer1Type::class, $customer);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('customer/edit.html.twig', [
+            'customer' => $customer,
+            'form' => $form,
         ]);
     }
 }
