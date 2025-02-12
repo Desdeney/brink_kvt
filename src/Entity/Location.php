@@ -43,9 +43,23 @@ class Location
     #[ORM\ManyToOne(inversedBy: 'locations')]
     private ?Contacts $contact_id = null;
 
+    /**
+     * @var Collection<int, Appointments>
+     */
+    #[ORM\OneToMany(targetEntity: Appointments::class, mappedBy: 'location_id')]
+    private Collection $appointments;
+
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'location_id')]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->locationImages = new ArrayCollection();
+        $this->appointments = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +177,66 @@ class Location
     public function setContactId(?Contacts $contact_id): static
     {
         $this->contact_id = $contact_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointments>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointments $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setLocationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointments $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getLocationId() === $this) {
+                $appointment->setLocationId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setLocationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getLocationId() === $this) {
+                $order->setLocationId(null);
+            }
+        }
 
         return $this;
     }

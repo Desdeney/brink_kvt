@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Appointments{% endblock %}
+
+{% block body %}
+    <h1>Appointments</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ appointment.id }}</td>
+            </tr>
+            <tr>
+                <th>Occasion</th>
+                <td>{{ appointment.occasion }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ appointment.date ? appointment.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Start_time</th>
+                <td>{{ appointment.startTime ? appointment.startTime|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>End_time</th>
+                <td>{{ appointment.endTime ? appointment.endTime|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Is_confirmed</th>
+                <td>{{ appointment.isConfirmed }}</td>
+            </tr>
+            <tr>
+                <th>Setup_with_location</th>
+                <td>{{ appointment.setupWithLocation }}</td>
+            </tr>
+            <tr>
+                <th>Teardown_with_location</th>
+                <td>{{ appointment.teardownWithLocation }}</td>
+            </tr>
+            <tr>
+                <th>Setup_date</th>
+                <td>{{ appointment.setupDate ? appointment.setupDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Setup_time</th>
+                <td>{{ appointment.setupTime ? appointment.setupTime|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Teardown_date</th>
+                <td>{{ appointment.teardownDate ? appointment.teardownDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Teardown_time</th>
+                <td>{{ appointment.teardownTime ? appointment.teardownTime|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Attendees_count</th>
+                <td>{{ appointment.attendeesCount }}</td>
+            </tr>
+            <tr>
+                <th>Attendees_age_from</th>
+                <td>{{ appointment.attendeesAgeFrom }}</td>
+            </tr>
+            <tr>
+                <th>Attendees_age_to</th>
+                <td>{{ appointment.attendeesAgeTo }}</td>
+            </tr>
+            <tr>
+                <th>Attendees_notes</th>
+                <td>{{ appointment.attendeesNotes }}</td>
+            </tr>
+            <tr>
+                <th>Music_pdf_path</th>
+                <td>{{ appointment.musicPdfPath }}</td>
+            </tr>
+            <tr>
+                <th>Dj_notes</th>
+                <td>{{ appointment.djNotes }}</td>
+            </tr>
+            <tr>
+                <th>Price_dj_hour</th>
+                <td>{{ appointment.priceDjHour }}</td>
+            </tr>
+            <tr>
+                <th>Price_dj_extention</th>
+                <td>{{ appointment.priceDjExtention }}</td>
+            </tr>
+            <tr>
+                <th>Price_tech</th>
+                <td>{{ appointment.priceTech }}</td>
+            </tr>
+            <tr>
+                <th>Price_approach</th>
+                <td>{{ appointment.priceApproach }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_appointments_index') }}">back to list</a>
+
+    <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">edit</a>
+
+    {{ include('appointments/_delete_form.html.twig') }}
+{% endblock %}

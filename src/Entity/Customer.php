@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -47,6 +49,24 @@ class Customer
     #[ORM\ManyToOne(inversedBy: 'customers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Payment $payment = null;
+
+    /**
+     * @var Collection<int, Appointments>
+     */
+    #[ORM\OneToMany(targetEntity: Appointments::class, mappedBy: 'customer_id')]
+    private Collection $appointments;
+
+    /**
+     * @var Collection<int, Order>
+     */
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'customer_id')]
+    private Collection $orders;
+
+    public function __construct()
+    {
+        $this->appointments = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -182,6 +202,66 @@ class Customer
     public function setPayment(?Payment $payment): static
     {
         $this->payment = $payment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Appointments>
+     */
+    public function getAppointments(): Collection
+    {
+        return $this->appointments;
+    }
+
+    public function addAppointment(Appointments $appointment): static
+    {
+        if (!$this->appointments->contains($appointment)) {
+            $this->appointments->add($appointment);
+            $appointment->setCustomerId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppointment(Appointments $appointment): static
+    {
+        if ($this->appointments->removeElement($appointment)) {
+            // set the owning side to null (unless already changed)
+            if ($appointment->getCustomerId() === $this) {
+                $appointment->setCustomerId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setCustomerId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getCustomerId() === $this) {
+                $order->setCustomerId(null);
+            }
+        }
 
         return $this;
     }

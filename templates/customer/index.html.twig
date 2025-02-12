@@ -1,47 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Kunden anlegen{% endblock %}
+{% block title %}Customer index{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Kunden</h1>
-            <div class="content-container">
-                <div class="row">
-                    <div class="col-2">
-                        Name
-                    </div>
-                    <div class="col-2">
-                        <i class="fas fa-phone">
-                        </i>
-                    </div>
-                    <div class="col-1">
-                        <i class="fas fa-envelope">
-                        </i>
-                    </div>
-                    <div class="col-5">
-                        Wohnort
-                    </div>
-                    <div class="col-2">
-                        Aktionen
-                    </div>
-                </div>
-                {% for customer in customers %}
-                    <div class="row">
-                        <div class="col-2">
-                            {{ customer.prename }} {{ customer.lastname }}
-                        </div>
-                        <div class="col-2">
-                            {{ customer.phone }}
-                        </div>
-                        <div class="col-1">
-                            <a href="mailto:{{ customer.email }}"><i class="fas fa-envelope"></i></a>
-                        </div>
-                        <div class="col-5">
-                            {{ customer.street }} {{ customer.housenr }}, {{ customer.postal }} {{ customer.city }}
-                        </div>
-                        <div class="col-2"></div>
-                    </div>
-                {% endfor %}
-            </div>
-    </div>
+    <h1>Customer index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Prename</th>
+                <th>Lastname</th>
+                <th>Street</th>
+                <th>Housenr</th>
+                <th>Postal</th>
+                <th>City</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Require_cash</th>
+                <th>Require_prepaid</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for customer in customers %}
+            <tr>
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.prename }}</td>
+                <td>{{ customer.lastname }}</td>
+                <td>{{ customer.street }}</td>
+                <td>{{ customer.housenr }}</td>
+                <td>{{ customer.postal }}</td>
+                <td>{{ customer.city }}</td>
+                <td>{{ customer.email }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.requireCash ? 'Yes' : 'No' }}</td>
+                <td>{{ customer.requirePrepaid ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_customer_show', {'id': customer.id}) }}">show</a>
+                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_customer_new') }}">Create new</a>
 {% endblock %}

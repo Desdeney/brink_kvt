@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block body %}
+    <h1>Contacts</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ contact.id }}</td>
+            </tr>
+            <tr>
+                <th>Prename</th>
+                <td>{{ contact.prename }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ contact.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ contact.email }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ contact.phone }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_contacts_index') }}">back to list</a>
+
+    <a href="{{ path('app_contacts_edit', {'id': contact.id}) }}">edit</a>
+
+    {{ include('contacts/_delete_form.html.twig') }}
+{% endblock %}
