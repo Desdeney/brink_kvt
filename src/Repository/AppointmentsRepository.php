@@ -16,6 +16,22 @@ class AppointmentsRepository extends ServiceEntityRepository
         parent::__construct($registry, Appointments::class);
     }
 
+    public function findActiveAppointments()
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.deactivated = false')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findInactiveAppointments()
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.deactivated = true')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Appointments[] Returns an array of Appointments objects
     //     */

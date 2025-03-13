@@ -1,66 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Appointments index{% endblock %}
+{% block title %}Termine{% endblock %}
 
 {% block body %}
-    <h1>Appointments index</h1>
-
+    <h1>Termine</h1>
+    <div class="table-container">
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Occasion</th>
-                <th>Date</th>
-                <th>Start_time</th>
-                <th>End_time</th>
-                <th>Is_confirmed</th>
-                <th>Setup_with_location</th>
-                <th>Teardown_with_location</th>
-                <th>Setup_date</th>
-                <th>Setup_time</th>
-                <th>Teardown_date</th>
-                <th>Teardown_time</th>
-                <th>Attendees_count</th>
-                <th>Attendees_age_from</th>
-                <th>Attendees_age_to</th>
-                <th>Attendees_notes</th>
-                <th>Music_pdf_path</th>
-                <th>Dj_notes</th>
-                <th>Price_dj_hour</th>
-                <th>Price_dj_extention</th>
-                <th>Price_tech</th>
-                <th>Price_approach</th>
-                <th>actions</th>
+                <th>Anlass</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th>Location</th>
+                <th>Datum</th>
+                <th>Start</th>
+                <th>Ende</th>
+                <th>Gäste Anmerkungen</th>
+                <th>DJ Anmerkungen</th>
+                <th>Aktionen</th>
             </tr>
         </thead>
         <tbody>
         {% for appointment in appointments %}
             <tr>
-                <td>{{ appointment.id }}</td>
                 <td>{{ appointment.occasion }}</td>
-                <td>{{ appointment.date ? appointment.date|date('Y-m-d') : '' }}</td>
-                <td>{{ appointment.startTime ? appointment.startTime|date('H:i:s') : '' }}</td>
-                <td>{{ appointment.endTime ? appointment.endTime|date('H:i:s') : '' }}</td>
-                <td>{{ appointment.isConfirmed }}</td>
-                <td>{{ appointment.setupWithLocation }}</td>
-                <td>{{ appointment.teardownWithLocation }}</td>
-                <td>{{ appointment.setupDate ? appointment.setupDate|date('Y-m-d') : '' }}</td>
-                <td>{{ appointment.setupTime ? appointment.setupTime|date('H:i:s') : '' }}</td>
-                <td>{{ appointment.teardownDate ? appointment.teardownDate|date('Y-m-d') : '' }}</td>
-                <td>{{ appointment.teardownTime ? appointment.teardownTime|date('H:i:s') : '' }}</td>
-                <td>{{ appointment.attendeesCount }}</td>
-                <td>{{ appointment.attendeesAgeFrom }}</td>
-                <td>{{ appointment.attendeesAgeTo }}</td>
-                <td>{{ appointment.attendeesNotes }}</td>
-                <td>{{ appointment.musicPdfPath }}</td>
-                <td>{{ appointment.djNotes }}</td>
-                <td>{{ appointment.priceDjHour }}</td>
-                <td>{{ appointment.priceDjExtention }}</td>
-                <td>{{ appointment.priceTech }}</td>
-                <td>{{ appointment.priceApproach }}</td>
+                <td>{{ appointment.customer.prename }}</td>
+                <td>{{ appointment.customer.lastname }}</td>
+                <td>{{ appointment.location.locationName }}</td>
+                <td>{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
+                <td>{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }} Uhr</td>
+                <td>{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }} Uhr</td>
+                <td>dasdasdsas</td>
+                <td>dasdas</td>
                 <td>
-                    <a href="{{ path('app_appointments_show', {'id': appointment.id}) }}">show</a>
-                    <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">edit</a>
+                    <a href="{{ path('app_appointments_show', {'id': appointment.id}) }}">Anzeigen</a>
+                    <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Bearbeiten</a>
                 </td>
             </tr>
         {% else %}
@@ -70,6 +44,6 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_appointments_new') }}">Create new</a>
+    </div>
+    <a href="{{ path('app_appointments_new') }}">Neuen Termin anlegen</a>
 {% endblock %}

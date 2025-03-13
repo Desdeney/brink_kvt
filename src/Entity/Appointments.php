@@ -18,10 +18,10 @@ class Appointments
 
     #[ORM\ManyToOne(inversedBy: 'appointments')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Customer $customer_id = null;
+    private ?Customer $customer = null;
 
     #[ORM\ManyToOne(inversedBy: 'appointments')]
-    private ?Location $location_id = null;
+    private ?Location $location = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $occasion = null;
@@ -92,6 +92,9 @@ class Appointments
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'appointment_id')]
     private Collection $orders;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $deactivated = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -100,30 +103,6 @@ class Appointments
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCustomerId(): ?Customer
-    {
-        return $this->customer_id;
-    }
-
-    public function setCustomerId(?Customer $customer_id): static
-    {
-        $this->customer_id = $customer_id;
-
-        return $this;
-    }
-
-    public function getLocationId(): ?Location
-    {
-        return $this->location_id;
-    }
-
-    public function setLocationId(?Location $location_id): static
-    {
-        $this->location_id = $location_id;
-
-        return $this;
     }
 
     public function getOccasion(): ?string
@@ -378,6 +357,42 @@ class Appointments
         return $this;
     }
 
+    public function isDeactivated(): ?bool
+    {
+        return $this->deactivated;
+    }
+
+    public function setDeactivated(?bool $deactivated): static
+    {
+        $this->deactivated = $deactivated;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): static
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Order>
      */
@@ -407,4 +422,6 @@ class Appointments
 
         return $this;
     }
+
+
 }

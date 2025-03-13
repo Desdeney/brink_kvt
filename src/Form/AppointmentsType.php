@@ -50,13 +50,15 @@ class AppointmentsType extends AbstractType
             ->add('price_dj_extention')
             ->add('price_tech')
             ->add('price_approach')
-            ->add('customer_id', EntityType::class, [
+            ->add('customer', EntityType::class, [
                 'class' => Customer::class,
-                'choice_label' => 'id',
+                'choice_label' => function (Customer $customer) {
+                    return $customer->getPrename() . ' ' . $customer->getLastname();
+                },
             ])
-            ->add('location_id', EntityType::class, [
+            ->add('location', EntityType::class, [
                 'class' => Location::class,
-                'choice_label' => 'id',
+                'choice_label' => 'locationname',
             ])
         ;
     }

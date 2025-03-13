@@ -28,3 +28,44 @@ label{
 a{
     color: #43A4CE;
 }
+
+/* Container für die Tabelle */
+.table-container {
+    max-height: 400px;  /* Maximale Höhe des Containers */
+    background-color: #dadada;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-y: auto;   /* Vertikales Scrollen innerhalb des Containers */
+    -webkit-overflow-scrolling: touch;  /* Smooth scrolling für mobile Geräte */
+}
+/* Scrollbar immer ausblenden */
+.table-container::-webkit-scrollbar {
+    width: 0px;   /* Setzt die Breite der vertikalen Scrollbar auf 0 */
+    background: transparent; /* Hintergrund transparent, um sicherzustellen, dass sie nicht angezeigt wird */
+}
+
+/* Für die horizontale Scrollbar */
+.table-container::-webkit-scrollbar:horizontal {
+    height: 0px;  /* Macht die horizontale Scrollbar unsichtbar */
+}
+
+/* Optionale Verbesserungen für die Tabelle */
+.table {
+    width: 100%;  /* Stellt sicher, dass die Tabelle den verfügbaren Platz einnimmt */
+    border-collapse: collapse;  /* Sorgt für eine saubere Darstellung */
+}
+
+.table th, .table td {
+    background-color: #dadada;
+    color: #2d2d2d;
+    padding: 8px;  /* Innenabstand */
+    text-align: left;  /* Text linksbündig */
+    border: 0;
+}
+
+/* Optional: Tabelle horizontal scrollbar für größere Bildschirme */
+@media (max-width: 767px) {
+    .table-container {
+        max-width: 100%;  /* Verhindert horizontales Scrollen auf kleinen Geräten */
+    }
+}

@@ -17,8 +17,12 @@ final class AppointmentsController extends AbstractController
     #[Route(name: 'app_appointments_index', methods: ['GET'])]
     public function index(AppointmentsRepository $appointmentsRepository): Response
     {
+        $appointments = $appointmentsRepository->findActiveAppointments();
+        $inactiveappointments = $appointmentsRepository->findInactiveAppointments();
+
         return $this->render('appointments/index.html.twig', [
-            'appointments' => $appointmentsRepository->findAll(),
+            'appointments' => $appointments,
+            'inactive' => $inactiveappointments,
         ]);
     }
 
@@ -30,6 +34,7 @@ final class AppointmentsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $appointment->setDeactivated(false);
             $entityManager->persist($appointment);
             $entityManager->flush();
 
@@ -72,7 +77,7 @@ final class AppointmentsController extends AbstractController
     public function delete(Request $request, Appointments $appointment, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$appointment->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($appointment);
+            $appointment->setDeactivated(true);
             $entityManager->flush();
         }
 
