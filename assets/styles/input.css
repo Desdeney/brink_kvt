@@ -1,12 +1,10 @@
 input[type="text"] {
-    background-color: #EFEFEF;
-    border: none;
+    border: 1px solid #e7e7e7;
     border-radius: 8px;
     padding: 8px 8px;
 }
 
 input[type="email"] {
-    background-color: #EFEFEF;
     border: none;
     border-radius: 8px;
     padding: 8px 8px;
@@ -26,7 +24,6 @@ button[type="submit"]:hover{
 }
 
 select {
-    background-color: #EFEFEF;
     border: none;
     border-radius: 8px;
     padding: 16px; /* Optional: für mehr Platz */

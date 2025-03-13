@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Appointments{% endblock %}
+{% block title %}Neuer Termin{% endblock %}
 
 {% block body %}
-    <h1>Create new Appointments</h1>
+    <h1>Neuen Termin anlegen</h1>
 
     {{ include('appointments/_form.html.twig') }}
 
-    <a href="{{ path('app_appointments_index') }}">back to list</a>
+    <a href="{{ path('app_appointments_index') }}">Zurück zur Liste</a>
 {% endblock %}

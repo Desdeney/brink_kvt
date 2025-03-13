@@ -32,7 +32,7 @@ a{
 /* Container für die Tabelle */
 .table-container {
     max-height: 400px;  /* Maximale Höhe des Containers */
-    background-color: #dadada;
+    background-color: #eeeeee;
     padding: 16px;
     border-radius: 8px;
     overflow-y: auto;   /* Vertikales Scrollen innerhalb des Containers */
@@ -56,7 +56,7 @@ a{
 }
 
 .table th, .table td {
-    background-color: #dadada;
+    background-color: #eeeeee;
     color: #2d2d2d;
     padding: 8px;  /* Innenabstand */
     text-align: left;  /* Text linksbündig */
@@ -68,4 +68,8 @@ a{
     .table-container {
         max-width: 100%;  /* Verhindert horizontales Scrollen auf kleinen Geräten */
     }
+}
+
+.setup_date{
+    display: none;
 }

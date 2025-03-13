@@ -1,0 +1,7 @@
+{% block form_row %}
+    <div style="margin-bottom: 8px;">
+        {{ form_label(form, null, {'attr': {'style': 'font-weight: bold; font-size: 16px;'}}) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}

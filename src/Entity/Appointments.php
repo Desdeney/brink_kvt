@@ -16,12 +16,14 @@ class Appointments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'appointments')]
+    #[ORM\ManyToOne(inversedBy: "appointments", cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'appointments')]
+    #[ORM\ManyToOne(inversedBy: "appointments", cascade: ["persist"])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Location $location = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $occasion = null;
