@@ -28,12 +28,15 @@ class AppointmentsType extends AbstractType
             ->add('date', null, [
                 'widget' => 'choice',
                 'format' => 'dd.MM.yyyy',
+                'label' => 'Datum der Veranstaltung'
             ])
             ->add('start_time', null, [
                 'widget' => 'choice',
+                'label' => 'Beginn der Veranstaltung',
             ])
             ->add('end_time', null, [
                 'widget' => 'choice',
+                'label' => 'Ende der  Veranstaltung',
             ])
             ->add('is_confirmed', CheckboxType::class, [
                 'required' => false,  // Checkbox muss nicht zwingend ausgewählt sein
@@ -74,15 +77,15 @@ class AppointmentsType extends AbstractType
                 'label' => 'Zeit (Abbau)',
             ])
             ->add('attendees_count', options:['label' => 'Anzahl der Teilnehmer'])
-            ->add('attendees_age_from')
-            ->add('attendees_age_to')
-            ->add('attendees_notes')
-            ->add('music_pdf_path')
-            ->add('dj_notes')
-            ->add('price_dj_hour')
-            ->add('price_dj_extention')
-            ->add('price_tech')
-            ->add('price_approach')
+            ->add('attendees_age_from', options:['label' => 'Alter von'])
+            ->add('attendees_age_to', options:['label' => 'Alter bis'])
+            ->add('attendees_notes', options:['label' => 'Anmerkungen zum Publikum'])
+            ->add('music_pdf_path', options:['label' => 'Fragebogen'])
+            ->add('dj_notes', options:['label' => 'Anmerkungen für den DJ'])
+            ->add('price_dj_hour', options:['label' => 'Preis (DJ) / Std.'])
+            ->add('price_dj_extention', options:['label' => 'Preis (Verlängerung)'])
+            ->add('price_tech', options:['label' => 'Preis Technik'])
+            ->add('price_approach', options:['label' => 'Preis Anfahrt'])
         ;
     }
 
