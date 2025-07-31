@@ -73,3 +73,11 @@ a{
 .setup_date{
     display: none;
 }
+
+.text-color-brink{
+    color: #43A4CE;
+}
+
+.c-pointer{
+    cursor: pointer;
+}
