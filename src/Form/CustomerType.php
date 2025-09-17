@@ -14,19 +14,21 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('prename')
-            ->add('lastname')
-            ->add('street')
-            ->add('housenr')
-            ->add('postal')
-            ->add('city')
-            ->add('email')
-            ->add('phone')
-            ->add('require_cash')
-            ->add('require_prepaid')
+            ->add('prename', null, ['label' => 'Vorname', 'attr' => ['placeholder' => 'Max']])
+            ->add('lastname', null, ['label' => 'Nachname', 'attr' => ['placeholder' => 'Mustermann']])
+            ->add('street', null, ['label' => 'Strasse', 'attr' => ['placeholder' => 'Strasse']])
+            ->add('housenr', null, ['label' => 'Hausnummer', 'attr' => ['placeholder' => '12']])
+            ->add('postal', null, ['label' => 'PLZ', 'attr' => ['placeholder' => '26721']])
+            ->add('city', null, ['label' => 'Ort', 'attr' => ['placeholder' => 'Musterstadt']])
+            ->add('email', null, ['label' => 'E-Mail', 'attr' => ['placeholder' => 'mail@example.com']])
+            ->add('phone', null, ['label' => 'Telefon', 'attr' => ['placeholder' => '012345678901']])
+            ->add('require_cash', null, ['label' => 'Barzahlung erforderlich', 'data' => false])
+            ->add('require_prepaid', null, ['label' => 'Vorkasse erforderlich', 'data' => false])
             ->add('payment', EntityType::class, [
                 'class' => Payment::class,
-                'choice_label' => 'id',
+                'choice_value' => 'id',
+                'choice_label' => 'name',
+                'label' => 'Zahlungsart',
             ])
         ;
     }

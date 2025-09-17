@@ -3,104 +3,121 @@
 {% block title %}Appointments{% endblock %}
 
 {% block body %}
-    <h1>Appointments</h1>
+    <h1>Termine</h1>
 
+
+<div class="table-container mt-4 mb-4">
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ appointment.id }}</td>
-            </tr>
-            <tr>
-                <th>Occasion</th>
+                <th>Anlass</th>
                 <td>{{ appointment.occasion }}</td>
             </tr>
             <tr>
-                <th>Date</th>
-                <td>{{ appointment.date ? appointment.date|date('Y-m-d') : '' }}</td>
+                <th>Datum</th>
+                <td>{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
             </tr>
             <tr>
-                <th>Start_time</th>
-                <td>{{ appointment.startTime ? appointment.startTime|date('H:i:s') : '' }}</td>
+                <th>Beginn (Uhrzeit)</th>
+                <td>{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }} Uhr</td>
             </tr>
             <tr>
-                <th>End_time</th>
-                <td>{{ appointment.endTime ? appointment.endTime|date('H:i:s') : '' }}</td>
+                <th>Ende (Uhrzeit)</th>
+                <td>{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }} Uhr</td>
             </tr>
             <tr>
-                <th>Is_confirmed</th>
-                <td>{{ appointment.isConfirmed }}</td>
+                <th>Dauer</th>
+                <td>
+                    {% if appointment.startTime and appointment.endTime %}
+                        {% set start = appointment.startTime|date('U') %}
+                        {% set end = appointment.endTime|date('U') %}
+                        {% if end < start %}
+                            {% set end = end + 86400 %} {# +24h, wenn Ende nach Mitternacht liegt #}
+                        {% endif %}
+                        {% set diff = (end - start) / 3600 %}
+                        {{ diff|round(0, 'floor') }} Stunden
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Bestätigt?</th>
+                <td>{{ appointment.isConfirmed ? 'Ja' : 'Nein' }}</td>
             </tr>
             <tr>
-                <th>Setup_with_location</th>
-                <td>{{ appointment.setupWithLocation }}</td>
+                <th>Aufbau geklärt?</th>
+                <td>{{ appointment.setupWithLocation ? 'Ist abgeklärt' : 'Nicht abgeklärt' }}</td>
             </tr>
             <tr>
-                <th>Teardown_with_location</th>
-                <td>{{ appointment.teardownWithLocation }}</td>
+                <th>Abbau geklärt?</th>
+                <td>{{ appointment.teardownWithLocation ? 'Ist abgeklärt' : 'Nicht abgeklärt'  }}</td>
             </tr>
             <tr>
-                <th>Setup_date</th>
-                <td>{{ appointment.setupDate ? appointment.setupDate|date('Y-m-d') : '' }}</td>
+                <th>Aufbau Datum</th>
+                <td>{{ appointment.setupDate ? appointment.setupDate|date('d.m.Y') : '' }}</td>
             </tr>
             <tr>
-                <th>Setup_time</th>
-                <td>{{ appointment.setupTime ? appointment.setupTime|date('H:i:s') : '' }}</td>
+                <th>Aufbau Zeit</th>
+                <td>{{ appointment.setupTime ? appointment.setupTime|date('H:i') : '' }} Uhr</td>
             </tr>
             <tr>
-                <th>Teardown_date</th>
-                <td>{{ appointment.teardownDate ? appointment.teardownDate|date('Y-m-d') : '' }}</td>
+                <th>Abbau Datum</th>
+                <td>{{ appointment.teardownDate ? appointment.teardownDate|date('d.m.Y') : '' }}</td>
             </tr>
             <tr>
-                <th>Teardown_time</th>
-                <td>{{ appointment.teardownTime ? appointment.teardownTime|date('H:i:s') : '' }}</td>
+                <th>Abbau Zeit</th>
+                <td>{{ appointment.teardownTime ? appointment.teardownTime|date('H:i') : '' }} Uhr</td>
             </tr>
             <tr>
-                <th>Attendees_count</th>
+                <th>Gäste</th>
                 <td>{{ appointment.attendeesCount }}</td>
             </tr>
             <tr>
-                <th>Attendees_age_from</th>
+                <th>Gästealter von</th>
                 <td>{{ appointment.attendeesAgeFrom }}</td>
             </tr>
             <tr>
-                <th>Attendees_age_to</th>
+                <th>Gästealter bis</th>
                 <td>{{ appointment.attendeesAgeTo }}</td>
             </tr>
             <tr>
-                <th>Attendees_notes</th>
+                <th>Informationen zu den Gästen</th>
                 <td>{{ appointment.attendeesNotes }}</td>
             </tr>
             <tr>
-                <th>Music_pdf_path</th>
-                <td>{{ appointment.musicPdfPath }}</td>
+                <th>Musikfragebogen PDF</th>
+                <td>{{ appointment.musicPdfPath ? 'Hinterlegt' : 'Nicht hinterlegt' }}</td>
             </tr>
             <tr>
-                <th>Dj_notes</th>
+                <th>Notizen für den DJ</th>
                 <td>{{ appointment.djNotes }}</td>
             </tr>
             <tr>
-                <th>Price_dj_hour</th>
-                <td>{{ appointment.priceDjHour }}</td>
+                <th>DJ Preis (Stunde)</th>
+                <td>{{ appointment.priceDjHour }} €/Stunde</td>
             </tr>
             <tr>
-                <th>Price_dj_extention</th>
-                <td>{{ appointment.priceDjExtention }}</td>
+                <th>Verlängerung / Stunde</th>
+                <td>{{ appointment.priceDjExtention }} €/Stunde</td>
             </tr>
             <tr>
-                <th>Price_tech</th>
-                <td>{{ appointment.priceTech }}</td>
+                <th>Preis Technik</th>
+                <td>{{ appointment.priceTech }} €</td>
             </tr>
             <tr>
-                <th>Price_approach</th>
-                <td>{{ appointment.priceApproach }}</td>
+                <th>Anfahrtskosten</th>
+                <td>{{ appointment.priceApproach }} €</td>
+            </tr>
+            <tr>
+                <th>Gesamtkosten</th>
+                <td>{{ (appointment.priceDjHour*diff)+appointment.priceTech+appointment.priceApproach }}</td>
             </tr>
         </tbody>
     </table>
+</div>
 
-    <a href="{{ path('app_appointments_index') }}">back to list</a>
+    <a class="special-link" href="{{ path('app_appointments_index') }}">Alle Termine ansehen</a>
 
-    <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">edit</a>
-
-    {{ include('appointments/_delete_form.html.twig') }}
+    <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Termin bearbeiten</a>
+    <div class="mb-5"></div>
 {% endblock %}

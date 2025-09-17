@@ -33,8 +33,8 @@
                 <td>dasdasdsas</td>
                 <td>dasdas</td>
                 <td>
-                    <a href="{{ path('app_appointments_show', {'id': appointment.id}) }}">Anzeigen</a>
-                    <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Bearbeiten</a>
+                    <a class="special-link" href="{{ path('app_appointments_show', {'id': appointment.id}) }}">Anzeigen</a>
+                    <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Bearbeiten</a>
                 </td>
             </tr>
         {% else %}
@@ -45,5 +45,6 @@
         </tbody>
     </table>
     </div>
-    <a href="{{ path('app_appointments_new') }}">Neuen Termin anlegen</a>
+    <div class="mt-4"></div>
+    <a class="special-link" href="{{ path('app_appointments_new') }}">Neuen Termin anlegen</a>
 {% endblock %}

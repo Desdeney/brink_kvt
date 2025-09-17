@@ -8,6 +8,7 @@ body {
 h1{
     font-size: 32px;
     font-weight: bold;
+    color: #43A4CE;
 }
 
 h2{
@@ -17,22 +18,48 @@ h2{
 }
 
 
-.row{
-    margin-bottom: 24px;
-}
-
 label{
     font-weight: bold;
 }
 
 a{
     color: #43A4CE;
+    text-decoration: none;
+}
+
+.special-link{
+    padding: 8px;
+    color: #f9f9f9;
+    background-color: #43A4CE;
+    border-radius: 8px;
+}
+
+.special-link:hover{
+    background-color: #2a7593;
+
+}
+
+.nav-link{
+    color: white;
+    font-size: 18px;
+}
+
+#sidebarMenu{
+    background-color: #43A4CE;
+}
+
+.nav-link.active{
+    font-weight: bold;
+}
+
+.nav-link:hover{
+    font-weight: bold;
+    color: white;
 }
 
 /* Container für die Tabelle */
 .table-container {
-    max-height: 400px;  /* Maximale Höhe des Containers */
-    background-color: #eeeeee;
+    background-color: #F5F5F5;
     padding: 16px;
     border-radius: 8px;
     overflow-y: auto;   /* Vertikales Scrollen innerhalb des Containers */
@@ -56,7 +83,7 @@ a{
 }
 
 .table th, .table td {
-    background-color: #eeeeee;
+    background-color: #F5F5F5;
     color: #2d2d2d;
     padding: 8px;  /* Innenabstand */
     text-align: left;  /* Text linksbündig */

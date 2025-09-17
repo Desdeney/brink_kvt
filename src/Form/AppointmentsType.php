@@ -8,6 +8,7 @@ use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -60,8 +61,6 @@ class AppointmentsType extends AbstractType
                 'widget' => 'choice',
                 'format' => 'dd MM yyyy',
                 'label' => 'Datum (Aufbau)',
-                'label_attr' => ['class' => 'setup_date'],
-                'attr' => ['class' => 'setup_date'],
             ])
             ->add('setup_time', null, [
                 'widget' => 'choice',
@@ -80,12 +79,16 @@ class AppointmentsType extends AbstractType
             ->add('attendees_age_from', options:['label' => 'Alter von'])
             ->add('attendees_age_to', options:['label' => 'Alter bis'])
             ->add('attendees_notes', options:['label' => 'Anmerkungen zum Publikum'])
-            ->add('music_pdf_path', options:['label' => 'Fragebogen'])
+            ->add('musicPdfPath', options:['label' => 'PDF mit Musikbeschreibung', 'data'=>'folgt'])
             ->add('dj_notes', options:['label' => 'Anmerkungen für den DJ'])
             ->add('price_dj_hour', options:['label' => 'Preis (DJ) / Std.'])
             ->add('price_dj_extention', options:['label' => 'Preis (Verlängerung)'])
             ->add('price_tech', options:['label' => 'Preis Technik'])
             ->add('price_approach', options:['label' => 'Preis Anfahrt'])
+            ->add('save', SubmitType::class, [
+                'label' => 'Speichern',
+                'attr' => ['class' => 'btn btn-primary']
+            ]);
         ;
     }
 
