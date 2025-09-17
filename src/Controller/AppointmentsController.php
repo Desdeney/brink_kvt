@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Appointments;
 use App\Form\AppointmentsType;
 use App\Repository\AppointmentsRepository;
+use App\Service\EventMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ final class AppointmentsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_appointments_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EventMailer $eventMailer): Response
     {
         $appointment = new Appointments();
         $form = $this->createForm(AppointmentsType::class, $appointment);
@@ -37,6 +38,7 @@ final class AppointmentsController extends AbstractController
             $appointment->setDeactivated(false);
             $entityManager->persist($appointment);
             $entityManager->flush();
+            $eventMailer->sendAppointmentNotification($appointment);
 
             return $this->redirectToRoute('app_appointments_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -56,13 +58,14 @@ final class AppointmentsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_appointments_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Appointments $appointment, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Appointments $appointment, EntityManagerInterface $entityManager, EventMailer $eventMailer): Response
     {
         $form = $this->createForm(AppointmentsType::class, $appointment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $eventMailer->sendAppointmentNotification($appointment);
 
             return $this->redirectToRoute('app_appointments_index', [], Response::HTTP_SEE_OTHER);
         }

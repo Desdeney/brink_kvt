@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Appointments;
 use App\Entity\Customer;
 use App\Entity\Location;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -22,6 +23,13 @@ class AppointmentsType extends AbstractType
             ])
             ->add('location', LocationType::class, [
                 'label' => false
+            ])
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'email',
+                'multiple' => true,
+                'required' => false,
+                'label' => 'Verantwortliche'
             ])
             ->add('occasion', options:[
                 'label' => 'Veranstaltungsart'
