@@ -67,4 +67,22 @@ final class CustomerController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/{id}/delete', name: 'app_customer_delete', methods: ['GET', 'POST'])]
+    public function delete(Request $request, Customer $customer, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(CustomerType::class, $customer);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_customer_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('customer/edit.html.twig', [
+            'customer' => $customer,
+            'form' => $form,
+        ]);
+    }
 }

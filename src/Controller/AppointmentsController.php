@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Appointments;
 use App\Form\AppointmentsType;
 use App\Repository\AppointmentsRepository;
+use App\Entity\Customer;
+use App\Entity\Location;
 use App\Service\EventMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -35,9 +38,27 @@ final class AppointmentsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // 1) Falls KEIN bestehender Kunde gewählt wurde, aber "Neuer Kunde" ausgefüllt ist → anlegen
+            if (null === $appointment->getCustomer()) {
+                if ($newCustomer = $this->getSubmittedNewCustomer($form)) {
+                    $entityManager->persist($newCustomer);
+                    $appointment->setCustomer($newCustomer);
+                }
+            }
+
+            // 2) Falls KEINE bestehende Location gewählt wurde, aber "Neue Location" ausgefüllt ist → anlegen
+            if (null === $appointment->getLocation()) {
+                if ($newLocation = $this->getSubmittedNewLocation($form)) {
+                    $entityManager->persist($newLocation);
+                    $appointment->setLocation($newLocation);
+                }
+            }
+
             $appointment->setDeactivated(false);
             $entityManager->persist($appointment);
             $entityManager->flush();
+
             $eventMailer->sendAppointmentNotification($appointment);
 
             return $this->redirectToRoute('app_appointments_index', [], Response::HTTP_SEE_OTHER);
@@ -64,7 +85,25 @@ final class AppointmentsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // Gleiches Prinzip wie in new():
+            if (null === $appointment->getCustomer()) {
+                if ($newCustomer = $this->getSubmittedNewCustomer($form)) {
+                    $entityManager->persist($newCustomer);
+                    $appointment->setCustomer($newCustomer);
+                }
+            }
+
+            if (null === $appointment->getLocation()) {
+                if ($newLocation = $this->getSubmittedNewLocation($form)) {
+                    $entityManager->persist($newLocation);
+                    $appointment->setLocation($newLocation);
+                }
+            }
+
+            // Bei Edit reicht flush(), persist ist nicht nötig solange die Entitäten gemanaged sind
             $entityManager->flush();
+
             $eventMailer->sendAppointmentNotification($appointment);
 
             return $this->redirectToRoute('app_appointments_index', [], Response::HTTP_SEE_OTHER);
@@ -85,5 +124,48 @@ final class AppointmentsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_appointments_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function getSubmittedNewCustomer(FormInterface $form): ?Customer
+    {
+        /** @var ?Customer $c */
+        $c = $form->get('customer')->getData();
+        if (!$c instanceof Customer) {
+            return null;
+        }
+        // "Leer?"-Heuristik – passe Felder nach Bedarf an
+        $vals = [
+            $c->getPrename(),
+            $c->getLastname(),
+            $c->getEmail(),
+            $c->getStreet(),
+            $c->getCity(),
+            $c->getPostal(),
+        ];
+        $allEmpty = true;
+        foreach ($vals as $v) {
+            if ($v !== null && $v !== '') { $allEmpty = false; break; }
+        }
+        return $allEmpty ? null : $c;
+    }
+
+    private function getSubmittedNewLocation(FormInterface $form): ?Location
+    {
+        /** @var ?Location $l */
+        $l = $form->get('location')->getData();
+        if (!$l instanceof Location) {
+            return null;
+        }
+        $vals = [
+            $l->getLocationName(),
+            $l->getStreet(),
+            $l->getCity(),
+            $l->getPostal(),
+        ];
+        $allEmpty = true;
+        foreach ($vals as $v) {
+            if ($v !== null && $v !== '') { $allEmpty = false; break; }
+        }
+        return $allEmpty ? null : $l;
     }
 }

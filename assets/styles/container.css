@@ -2,3 +2,13 @@
     background-color: #F5F5F5;
     border-radius: 8px;
 }
+
+/* Unter Desktop */
+.w-xl-75 { width: 95%; }
+main { margin-left: 0; }
+
+/* Ab Desktop (Bootstrap "xl" = ≥1200px) */
+@media (min-width: 1200px) {
+    .w-xl-75 { width: 75%; }
+    main { margin-left: 18vw; }
+}

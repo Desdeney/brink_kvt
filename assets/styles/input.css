@@ -23,6 +23,19 @@ button[type="submit"]:hover{
     background-color: #3691B7;
 }
 
+button[type="button"] {
+    background-color: #43A4CE;
+    border: none;
+    padding: 8px 16px;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+button[type="button"]:hover{
+    background-color: #3691B7;
+}
+
 select {
     border: none;
     border-radius: 8px;
@@ -30,4 +43,55 @@ select {
     font-size: 16px; /* Optional: für Textgröße */
     appearance: none;
     outline: none; /* Entfernt die Fokuskontur */
+}
+
+/* Rahmen/Background weg, wie plain Text */
+.select-plain {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+    border: 0;
+    box-shadow: none !important;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    /* Liste sichtbar machen */
+    min-block-size: 8lh;          /* etwa 8 Zeilen hoch */
+    overflow-y: auto;
+    cursor: default;
+}
+/* IE/Edge Legacy Pfeil entfernen (falls relevant) */
+.select-plain::-ms-expand { display: none; }
+
+/* Optionen wie einfache Liste */
+.select-plain option {
+    background: transparent !important;
+    color: inherit !important;
+    padding: .25rem 0;
+    border: 0;
+}
+
+/* Hover/Focus-Zustand dezent, ohne Hintergründe */
+.select-plain option:hover,
+.select-plain option:focus {
+    text-decoration: underline;
+}
+
+/* Markierte Items ohne Hintergrund, nur typografisch markiert */
+.select-plain option:checked {
+    background: transparent !important;
+    color: inherit !important;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Falls Bootstrap im Spiel ist: */
+.form-select.select-plain {
+    background-image: none; /* Caret entfernen */
+    border: 0;
+    padding: 0;
 }

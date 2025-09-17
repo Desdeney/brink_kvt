@@ -39,13 +39,13 @@ class Appointments
     private ?\DateTimeInterface $end_time = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $is_confirmed = null;
+    private ?bool $is_confirmed = false;
 
     #[ORM\Column(nullable: true)]
-    private ?int $setup_with_location = null;
+    private ?bool $setup_with_location = true;
 
     #[ORM\Column(nullable: true)]
-    private ?int $teardown_with_location = null;
+    private ?bool $teardown_with_location = true;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $setup_date = null;
@@ -163,36 +163,36 @@ class Appointments
         return $this;
     }
 
-    public function getIsConfirmed(): ?int
+    public function getIsConfirmed(): ?bool
     {
         return $this->is_confirmed;
     }
 
-    public function setIsConfirmed(?int $is_confirmed): static
+    public function setIsConfirmed(?bool $is_confirmed): static
     {
         $this->is_confirmed = $is_confirmed;
 
         return $this;
     }
 
-    public function getSetupWithLocation(): ?int
+    public function getSetupWithLocation(): ?bool
     {
         return $this->setup_with_location;
     }
 
-    public function setSetupWithLocation(?int $setup_with_location): static
+    public function setSetupWithLocation(?bool $setup_with_location): static
     {
         $this->setup_with_location = $setup_with_location;
 
         return $this;
     }
 
-    public function getTeardownWithLocation(): ?int
+    public function getTeardownWithLocation(): ?bool
     {
         return $this->teardown_with_location;
     }
 
-    public function setTeardownWithLocation(?int $teardown_with_location): static
+    public function setTeardownWithLocation(?bool $teardown_with_location): static
     {
         $this->teardown_with_location = $teardown_with_location;
 
@@ -300,11 +300,9 @@ class Appointments
         return $this->music_pdf_path;
     }
 
-    public function setMusicPdfPath(?string $music_pdf_path): static
+    public function setMusicPdfPath(?string $music_pdf_path): void
     {
         $this->music_pdf_path = $music_pdf_path;
-
-        return $this;
     }
 
     public function getDjNotes(): ?string

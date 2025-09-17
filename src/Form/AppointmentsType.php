@@ -9,7 +9,9 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,40 +20,84 @@ class AppointmentsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('customerSelect', EntityType::class, [
+                'class' => Customer::class,
+                'choice_label' => fn(Customer $c) => sprintf('%s %s — %s %s, %s %s',
+                    $c->getPrename(), $c->getLastname(),
+                    $c->getStreet(), $c->getHousenr(),
+                    $c->getPostal(), $c->getCity()
+                ),
+                'placeholder' => 'Bitte wählen',
+                'required' => false,
+                'label' => 'Kunde',
+                'mapped' => true,
+                'property_path' => 'customer',
+                'attr' => ['class' => 'form-select'],
+            ])
+            ->add('locationSelect', EntityType::class, [
+                'class' => Location::class,
+                'choice_label' => fn(Location $l) => sprintf('%s — %s %s, %s %s',
+                    $l->getLocationName(), $l->getStreet(), $l->getStreetnr(),
+                    $l->getPostal(), $l->getCity()
+                ),
+                'placeholder' => 'Bitte wählen',
+                'required' => false,
+                'mapped' => true,
+                'label' => 'Location',
+                'property_path' => 'location',
+                'attr' => ['class' => 'form-select'],
+            ])
             ->add('customer', CustomerType::class, [
-                'label' => false
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('location', LocationType::class, [
-                'label' => false
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('users', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'email',
-                'multiple' => true,
-                'required' => false,
-                'label' => 'Verantwortliche'
+                'class'         => User::class,
+                'choice_label'  => 'email',
+                'multiple'      => true,     // mehrere auswählbar
+                'expanded'      => true,     // als Checkboxen rendern
+                'by_reference'  => false,    // ruft addUser()/removeUser() auf
+                'required'      => false,
+                'label'         => 'Verantwortliche',
             ])
             ->add('occasion', options:[
                 'label' => 'Veranstaltungsart'
             ])
-            ->add('date', null, [
+            ->add('date', DateType::class, [
                 'widget' => 'choice',
                 'format' => 'dd.MM.yyyy',
-                'label' => 'Datum der Veranstaltung'
+                'label' => 'Datum der Veranstaltung',
+                'input'  => 'datetime',         // bei DateTimeImmutable: 'datetime_immutable'
+                'data'   => new \DateTime('today'),
             ])
-            ->add('start_time', null, [
+            ->add('start_time', TimeType::class, [
                 'widget' => 'choice',
-                'label' => 'Beginn der Veranstaltung',
+                'label'  => 'Beginn der Veranstaltung',
+                'input'  => 'datetime',
+                'data'   => (new \DateTime())->setTime(18, 0),
+                'minutes' => [0, 15, 30, 45],
             ])
-            ->add('end_time', null, [
-                'widget' => 'choice',
-                'label' => 'Ende der  Veranstaltung',
+
+            ->add('end_time', TimeType::class, [
+                'widget'     => 'choice',
+                'label'      => 'Ende der Veranstaltung',
+                'input'      => 'datetime',
+                'required'   => false,      // weil dein Setter null erlaubt
+                'empty_data' => null,
+                'data'       => (new \DateTime())->setTime(2, 0),
+                'minutes' => [0, 15, 30, 45],
+                // optional: Minutenraster
+                // 'minutes' => [0, 15, 30, 45],
             ])
             ->add('is_confirmed', CheckboxType::class, [
-                'required' => false,  // Checkbox muss nicht zwingend ausgewählt sein
-                'false_values' => [null, false, '0'], // Diese Werte werden als "false" betrachtet
-                'empty_data' => '0',  // Falls nichts übergeben wird, setze Standardwert auf "0"
                 'label' => 'Termin bestätigt?',
+                'required' => false,
             ])
             ->add('setup_with_location',  CheckboxType::class, [
                 'required' => false,  // Checkbox muss nicht zwingend ausgewählt sein
