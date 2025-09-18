@@ -17,12 +17,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $prename = null;
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $lastname = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ["ROLE_USER"];
 
     #[ORM\Column]
-    private ?string $password = null;
+    private ?string $password = "123";
 
     public function getId(): ?int
     {
@@ -39,6 +46,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getPrename(): ?string
+    {
+        return $this->prename;
+    }
+
+    public function setPrename(string $prename): static
+    {
+        $this->prename = $prename;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): static
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getFullName(): string
+    {
+        return trim(($this->prename ?? '') . ' ' . ($this->lastname ?? ''));
     }
 
     public function getUserIdentifier(): string

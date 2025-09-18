@@ -59,7 +59,7 @@ class AppointmentsType extends AbstractType
             ])
             ->add('users', EntityType::class, [
                 'class'         => User::class,
-                'choice_label'  => 'email',
+                'choice_label'  => 'fullName',
                 'multiple'      => true,     // mehrere auswählbar
                 'expanded'      => true,     // als Checkboxen rendern
                 'by_reference'  => false,    // ruft addUser()/removeUser() auf

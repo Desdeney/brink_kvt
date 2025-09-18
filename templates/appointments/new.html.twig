@@ -9,7 +9,6 @@
         <h2> Verantwortliche </h2>
         <div class="row mb-4 mt-3">
             <div class="col-md-6">
-                {{ form_label(form.users) }}
                 {{ form_widget(form.users) }}
             </div>
         </div>
@@ -75,8 +74,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-3">
-                    oder <button id="changeToExistingCustomer" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehenden Kunden wählen</button>
+                <div class="col-4">
+                    <span class="me-2">oder</span> <button id="changeToExistingCustomer" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehenden Kunden wählen</button>
                 </div>
             </div>
         </div>
@@ -94,44 +93,52 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-4 mt-3">
-            <div class="col-md-6">
-                {{ form_label(form.location.location_name) }}
-                {{ form_widget(form.location.location_name) }}
+        <div id="locationData" class="mb-5 d-none">
+            <div class="row mb-4 mt-3">
+                <div class="col-md-6">
+                    {{ form_label(form.location.location_name) }}
+                    {{ form_widget(form.location.location_name) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    {{ form_label(form.location.contact_id) }}
+                    {{ form_widget(form.location.contact_id) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    {{ form_label(form.location.street) }}
+                    {{ form_widget(form.location.street) }}
+                </div>
+                <div class="col-md-1">
+                    {{ form_label(form.location.streetnr) }}
+                    {{ form_widget(form.location.streetnr) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    {{ form_label(form.location.postal) }}
+                    {{ form_widget(form.location.postal) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_label(form.location.city) }}
+                    {{ form_widget(form.location.city) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    {{ form_label(form.location.notes) }}
+                    {{ form_widget(form.location.notes) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <span class="me-2">oder</span> <button id="changeToExistingLocation" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehende Location wählen</button>
+                </div>
             </div>
         </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {{ form_label(form.location.contact_id) }}
-                {{ form_widget(form.location.contact_id) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-5">
-                {{ form_label(form.location.street) }}
-                {{ form_widget(form.location.street) }}
-            </div>
-            <div class="col-md-1">
-                {{ form_label(form.location.streetnr) }}
-                {{ form_widget(form.location.streetnr) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.location.postal) }}
-                {{ form_widget(form.location.postal) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.location.city) }}
-                {{ form_widget(form.location.city) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {{ form_label(form.location.notes) }}
-                {{ form_widget(form.location.notes) }}
-            </div>
-        </div>
+
         <div class="my-5"></div>
         <h2> Allgemeine Daten zum Termin </h2>
         <div class="row mb-4 mt-3">
@@ -256,16 +263,32 @@
         //Buttons
         const newCustomerButton = document.getElementById('newCustomer');
         const changeToExistingCustomerButton = document.getElementById('changeToExistingCustomer');
+        const newLocationButton = document.getElementById('newLocation');
+        const changeToExistingLocationButton = document.getElementById('changeToExistingLocation');
 
         //Areas
         const customerSelect = document.getElementById('customerSelect');
         const customerData = document.getElementById('customerData');
+        const locationSelect = document.getElementById('locationSelect');
+        const locationData = document.getElementById('locationData');
 
         //Event Listeners
         newCustomerButton.addEventListener('click', function(){
             customerSelect.classList.add('d-none');
             newCustomerButton.classList.add('d-none');
             customerData.classList.remove('d-none');
+        })
+
+        newLocationButton.addEventListener('click', function (){
+            locationSelect.classList.add('d-none');
+            newLocationButton.classList.add('d-none');
+            locationData.classList.remove('d-none');
+        })
+
+        changeToExistingLocationButton.addEventListener('click', function (){
+            locationData.classList.add('d-none');
+            locationSelect.classList.remove('d-none');
+            newLocationButton.classList.remove('d-none');
         })
 
         changeToExistingCustomerButton.addEventListener('click', function (){
