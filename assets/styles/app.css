@@ -64,6 +64,11 @@ a{
     color: white;
 }
 
+.sidebar-btn{
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
 /* Container für die Tabelle */
 .table-container {
     background-color: #F5F5F5;
@@ -102,6 +107,13 @@ a{
     .table-container {
         max-width: 100%;  /* Verhindert horizontales Scrollen auf kleinen Geräten */
     }
+    h1{
+        font-size: 20px;
+    }
+
+    .show-navbar{
+        display: blocK;
+    }
 }
 
 .setup_date{
@@ -121,12 +133,19 @@ a{
     box-shadow: 50px 2px 20px 14px rgba(74,74,74,0.8);
 }
 
-.col-md-nav{
+.nav-width{
     flex: 0 0 auto;
-    width: 8%;
+    width: 100%;
 }
 
-.col-lg-nav{
-    flex: 0 0 auto;
-    width: 10%;
+@media(min-width: 798px){
+    .nav-width{
+        width: 8%;
+    }
+}
+
+@media(min-width: 1200px){
+    .nav-width{
+        width: 10%;
+    }
 }

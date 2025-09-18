@@ -16,9 +16,15 @@
         {% endblock %}
     </head>
     <body>
+    <div class="row d-md-none w-50 p-3">
+        <div id="sidebarControls">
+            <i id="showSidebarBtn" class="sidebar-btn p-1 fas fa-bars"></i>
+        </div>
+    </div>
     <div class="container-fluid my-5">
         <div class="row">
             {% include 'navigation.html.twig' %}
+
             <main class="col-md-9 col-lg-10 px-md-4 w-xl-75">
                 <div id="title-bar">
                     <div class="row d-flex justify-content-between">

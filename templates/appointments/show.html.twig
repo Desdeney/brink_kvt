@@ -1,40 +1,56 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Appointments{% endblock %}
-
-{% block body %}
-
-    {% set diff = 0 %}
-
     {% block header %}
         {{ appointment.occasion ~ ' von ' ~ appointment.customer.prename ~ ' ' ~ appointment.customer.lastname ~ ' am ' ~ (appointment.date|date('d.m.Y')) }}
     {% endblock %}
+{% block body %}
 
-<div class="table-container mt-4 mb-4">
+    {% set diff = 0 %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="table-container mt-4 mb-4">
+                <h2>Informationen zur Location</h2>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td><a href="{{ path('app_location_show', { id: appointment.location.id }) }}" target="_blank">{{ appointment.location.locationName }}</a><br>
+                            {{ appointment.location.street }} {{ appointment.location.streetnr }}<br>
+                            {{ appointment.location.postal }} {{ appointment.location.city }}
+                            <br><br>
+                            <strong>Notizen zur Location</strong><br>
+                            {{ appointment.location.notes }}<br><br></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="table-container mt-4 mb-4">
+                <h2>Informationen zum Kunden</h2>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td><a href="{{ path('app_customer_edit', { id: appointment.customer.id }) }}" target="_blank">{{ appointment.customer.prename }} {{ appointment.customer.lastname }}</a><br>
+                            {{ appointment.customer.street }} {{ appointment.customer.housenr }}<br>
+                            {{ appointment.customer.postal }} {{ appointment.customer.city }}<br><br>
+                            <strong>Informationen zur Zahlung</strong><br>
+                            {% if appointment.customer.requireCash == true %}
+                            <span>Barzahlung erforderlich</span><br>
+                            {% else %}
+                            <span>{{ appointment.customer.payment.name }}</span><br>
+                            {% endif %}
+                            {{ appointment.customer.requirePrepaid ? "Vorkasse erforderlich" : "Keine Vorkasse erforderlich."}}</td>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="table-container mb-4">
     <table class="table">
-        <tbody>
-            <tr>
-              <th>Location</th>
-                <td><a href="{{ path('app_location_show', { id: appointment.location.id }) }}" target="_blank">{{ appointment.location.locationName }}</a><br>
-                    {{ appointment.location.street }} {{ appointment.location.streetnr }}<br>
-                    {{ appointment.location.postal }} {{ appointment.location.city }}
-                    <br><br>
-                    <strong>Informationen zur Location</strong><br>
-                    {{ appointment.location.notes }}</td>
-            </tr>
-            <tr>
-                <th>Kunde</th>
-                <td><a href="{{ path('app_customer_edit', { id: appointment.customer.id }) }}" target="_blank">{{ appointment.customer.prename }} {{ appointment.customer.lastname }}</a><br>
-                {{ appointment.customer.street }} {{ appointment.customer.housenr }}<br>
-                    {{ appointment.customer.postal }} {{ appointment.customer.city }}
-                </td>
-                <td><a href="mailto:{{ appointment.customer.email }}"><button type="button" class="btn btn-primary"><i class="fas fa-envelope pe-2"></i>{{ appointment.customer.email }}</button></a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-    <div class="table-container mt-4 mb-4">
-    <table class="table mt-5">
         <tbody>
             <tr>
                 <th>Datum der Veranstaltung</th>
@@ -144,9 +160,11 @@
         </tbody>
     </table>
     </div>
-
-    <a class="special-link" href="{{ path('app_appointments_index') }}">Alle Termine ansehen</a>
-
-    <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Termin bearbeiten</a>
+    <div class="row">
+        <div class="col-12">
+            <a class="special-link" href="{{ path('app_appointments_index') }}">Alle Termine ansehen</a>
+            <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Termin bearbeiten</a>
+        </div>
+    </div>
     <div class="mb-5"></div>
 {% endblock %}

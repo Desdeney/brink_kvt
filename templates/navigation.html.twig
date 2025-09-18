@@ -1,6 +1,9 @@
 {# templates/navigation.html.twig #}
-<nav id="sidebarMenu" class="col-md-nav col-lg-nav d-md-block sidebar collapse shadow-lg">
-    <div class="sidebar-sticky pt-3">
+<nav id="sidebarMenu" class="nav-width d-none d-md-block sidebar shadow-lg">
+    <div id="sidebar-control" class="p-3">
+        <i class="sidebar-btn p-1 fas fa-times"></i>
+    </div>
+    <div id="sidebar" class="sidebar-sticky pt-3">
         <a class="navbar-brand px-3 mb-4 d-block" href="{{ path('app_home') }}">
             <img src="{{ asset('img/LogoWeiss.png') }}" width="55%"/>
         </a>
@@ -52,3 +55,17 @@
         </ul>
     </div>
 </nav>
+
+<script>
+    const navControl = document.getElementById('sidebar-control');
+    const sidebar = document.getElementById('sidebarMenu');
+    const showSidebarBtn = document.getElementById('showSidebarBtn');
+
+    showSidebarBtn.addEventListener('click', function (){
+        sidebar.classList.remove('d-none');
+    })
+
+    navControl.addEventListener('click', function (){
+        sidebar.classList.add('d-none');
+    })
+</script>
