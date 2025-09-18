@@ -20,7 +20,26 @@
         <div class="row">
             {% include 'navigation.html.twig' %}
             <main class="col-md-9 col-lg-10 px-md-4 w-xl-75">
-                {% block body %}{% endblock %}
+                <div id="title-bar">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-6">
+                            <h1>{% block header %}Brink Veranstaltungstechnik{% endblock %}</h1>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            {% block usercontrols %}
+                            <div class="usercontrols d-flex align-items-center">
+                                <i class="text-danger fas fa-truck-loading pe-2"></i>
+                                <i class="text-primary fas fa-cog pe-2"></i>
+                                <i class="text-primary fas fa-search pe-2"></i>
+                                <i class="text-primary fas fa-sign-out-alt pe-2"></i>
+                                <img src="{{ asset('img/avatar.png') }}" width="32px">
+                            </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+                {% block body %}
+                {% endblock %}
             </main>
         </div>
     </div>

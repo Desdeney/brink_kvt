@@ -5,29 +5,39 @@
 {% block body %}
 
     {% set diff = 0 %}
-    <h1>Termine</h1>
 
+    {% block header %}
+        {{ appointment.occasion ~ ' von ' ~ appointment.customer.prename ~ ' ' ~ appointment.customer.lastname ~ ' am ' ~ (appointment.date|date('d.m.Y')) }}
+    {% endblock %}
 
 <div class="table-container mt-4 mb-4">
     <table class="table">
         <tbody>
             <tr>
-                <th>Anlass</th>
-                <td>{{ appointment.occasion }}</td>
-            </tr>
-            <tr>
               <th>Location</th>
-                <td><a href="{{ path('app_location_show', { id: appointment.location.id }) }}" target="_blank">{{ appointment.location.locationName }}</a><br><br>
+                <td><a href="{{ path('app_location_show', { id: appointment.location.id }) }}" target="_blank">{{ appointment.location.locationName }}</a><br>
+                    {{ appointment.location.street }} {{ appointment.location.streetnr }}<br>
+                    {{ appointment.location.postal }} {{ appointment.location.city }}
+                    <br><br>
                     <strong>Informationen zur Location</strong><br>
                     {{ appointment.location.notes }}</td>
             </tr>
             <tr>
                 <th>Kunde</th>
-                <td><a href="{{ path('app_customer_show', { id: appointment.customer.id }) }}" target="_blank">{{ appointment.customer.prename }} {{ appointment.customer.lastname }}</a>
+                <td><a href="{{ path('app_customer_edit', { id: appointment.customer.id }) }}" target="_blank">{{ appointment.customer.prename }} {{ appointment.customer.lastname }}</a><br>
+                {{ appointment.customer.street }} {{ appointment.customer.housenr }}<br>
+                    {{ appointment.customer.postal }} {{ appointment.customer.city }}
+                </td>
                 <td><a href="mailto:{{ appointment.customer.email }}"><button type="button" class="btn btn-primary"><i class="fas fa-envelope pe-2"></i>{{ appointment.customer.email }}</button></a></td>
             </tr>
+        </tbody>
+    </table>
+</div>
+    <div class="table-container mt-4 mb-4">
+    <table class="table mt-5">
+        <tbody>
             <tr>
-                <th>Datum</th>
+                <th>Datum der Veranstaltung</th>
                 <td>{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
             </tr>
             <tr>
@@ -133,7 +143,7 @@
             </tr>
         </tbody>
     </table>
-</div>
+    </div>
 
     <a class="special-link" href="{{ path('app_appointments_index') }}">Alle Termine ansehen</a>
 

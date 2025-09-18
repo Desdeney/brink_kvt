@@ -10,5 +10,5 @@ main { margin-left: 0; }
 /* Ab Desktop (Bootstrap "xl" = ≥1200px) */
 @media (min-width: 1200px) {
     .w-xl-75 { width: 75%; }
-    main { margin-left: 18vw; }
+    main { margin-left: 12vw; }
 }

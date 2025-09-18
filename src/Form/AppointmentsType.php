@@ -74,13 +74,20 @@ class AppointmentsType extends AbstractType
                 'format' => 'dd.MM.yyyy',
                 'label' => 'Datum der Veranstaltung',
                 'input'  => 'datetime',         // bei DateTimeImmutable: 'datetime_immutable'
-                'data'   => new \DateTime('today'),
+                'placeholder' => [           // damit die Felder wirklich leer starten
+                    'year'  => 'Jahr',
+                    'month' => 'Monat',
+                    'day'   => 'Tag',
+                ],
             ])
             ->add('start_time', TimeType::class, [
                 'widget' => 'choice',
                 'label'  => 'Beginn der Veranstaltung',
                 'input'  => 'datetime',
-                'data'   => (new \DateTime())->setTime(18, 0),
+                'placeholder' => [
+                    'hour' => '18',
+                    'minute' => '00',
+                ],
                 'minutes' => [0, 15, 30, 45],
             ])
 
@@ -90,7 +97,10 @@ class AppointmentsType extends AbstractType
                 'input'      => 'datetime',
                 'required'   => false,      // weil dein Setter null erlaubt
                 'empty_data' => null,
-                'data'       => (new \DateTime())->setTime(2, 0),
+                'placeholder' => [
+                    'hour' => '02',
+                    'minute' => '00',
+                ],
                 'minutes' => [0, 15, 30, 45],
                 // optional: Minutenraster
                 // 'minutes' => [0, 15, 30, 45],

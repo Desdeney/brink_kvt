@@ -1,13 +1,330 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Appointments{% endblock %}
-
+{% block title %}Termin editieren: {{ appointment.customer.lastname }}{% endblock %}
+{% block header %}{{ appointment.occasion }} von {{ appointment.customer.lastname }}, {{ appointment.customer.prename }} am {{ appointment.date.format('d.m.Y') }}{% endblock %}
 {% block body %}
-    <h1>Edit Appointments</h1>
+    {{ form_start(form) }}
+    <div class="container-fluid mt-5">
+        <h2> Verantwortliche </h2>
+        <div class="row mb-4 mt-3">
+            <div class="col-md-6">
+                {{ form_widget(form.users) }}
+            </div>
+        </div>
+        <h2> Kundendaten </h2>
+        <div id="customerSelect" class="mb-5">
+            <div class="row">
+                <div class="col-md-3">
+                    {{ form_label(form.customerSelect) }}
+                    {{ form_widget(form.customerSelect) }}
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-3">
+                    <button id="newCustomer" type="button" class="btn btn-primary"><i class="fas fa-plus pe-2"></i>Neuen Kunden anlegen</button>
+                </div>
+            </div>
+        </div>
+        <div id="customerData" class="d-none mb-5">
+            <div class="row mb-4 mt-3">
+                <div class="col-md-3">
+                    {{ form_label(form.customer.prename) }}
+                    {{ form_widget(form.customer.prename) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_label(form.customer.lastname) }}
+                    {{ form_widget(form.customer.lastname) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    {{ form_label(form.customer.street) }}
+                    {{ form_widget(form.customer.street) }}
+                </div>
+                <div class="col-md-1">
+                    {{ form_label(form.customer.housenr) }}
+                    {{ form_widget(form.customer.housenr) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    {{ form_label(form.customer.postal) }}
+                    {{ form_widget(form.customer.postal) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_label(form.customer.city) }}
+                    {{ form_widget(form.customer.city) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    {{ form_label(form.customer.email) }}
+                    {{ form_widget(form.customer.email) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_label(form.customer.phone) }}
+                    {{ form_widget(form.customer.phone) }}
+                </div>
+            </div>
+            <div class="row mb-4 mt-2">
+                <div class="col-md-3">
+                    {{ form_label(form.customer.payment) }}
+                    {{ form_widget(form.customer.payment) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <span class="me-2">oder</span> <button id="changeToExistingCustomer" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehenden Kunden wählen</button>
+                </div>
+            </div>
+        </div>
+        <h2> Location Daten </h2>
+        <div id="locationSelect" class="mb-5">
+            <div class="row">
+                <div class="col-md-3">
+                    {{ form_label(form.locationSelect) }}
+                    {{ form_widget(form.locationSelect) }}
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-3">
+                    <button id="newLocation" type="button" class="btn btn-primary"><i class="fas fa-plus pe-2"></i>Neue Location anlegen</button>
+                </div>
+            </div>
+        </div>
+        <div id="locationData" class="mb-5 d-none">
+            <div class="row mb-4 mt-3">
+                <div class="col-md-6">
+                    {{ form_label(form.location.location_name) }}
+                    {{ form_widget(form.location.location_name) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    {{ form_label(form.location.contact_id) }}
+                    {{ form_widget(form.location.contact_id) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-5">
+                    {{ form_label(form.location.street) }}
+                    {{ form_widget(form.location.street) }}
+                </div>
+                <div class="col-md-1">
+                    {{ form_label(form.location.streetnr) }}
+                    {{ form_widget(form.location.streetnr) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    {{ form_label(form.location.postal) }}
+                    {{ form_widget(form.location.postal) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_label(form.location.city) }}
+                    {{ form_widget(form.location.city) }}
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    {{ form_label(form.location.notes) }}
+                    {{ form_widget(form.location.notes) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <span class="me-2">oder</span> <button id="changeToExistingLocation" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehende Location wählen</button>
+                </div>
+            </div>
+        </div>
 
-    {{ include('appointments/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="my-5"></div>
+        <h2> Allgemeine Daten zum Termin </h2>
+        <div class="row mb-4 mt-3">
+            <div class="col-md-6">
+                {{ form_label(form.occasion) }}
+                {{ form_widget(form.occasion) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                {{ form_label(form.date) }}
+                {{ form_widget(form.date) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.start_time) }}
+                {{ form_widget(form.start_time) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.end_time) }}
+                {{ form_widget(form.end_time) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form_label(form.is_confirmed) }}
+                {{ form_widget(form.is_confirmed) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                {{ form_label(form.setup_with_location) }}
+                {{ form_widget(form.setup_with_location) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                {{ form_label(form.teardown_with_location) }}
+                {{ form_widget(form.teardown_with_location) }}
+            </div>
+        </div>
+        <div id="setup_fields" class="row mb-4 d-none">
+            <div class="col-md-3">
+                {{ form_label(form.setup_date) }}
+                {{ form_widget(form.setup_date) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.setup_time) }}
+                {{ form_widget(form.setup_time) }}
+            </div>
+        </div>
+        <div id="teardown_fields" class="row mb-4 d-none">
+            <div class="col-md-3">
+                {{ form_label(form.teardown_date) }}
+                {{ form_widget(form.teardown_date) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.teardown_time) }}
+                {{ form_widget(form.teardown_time) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                {{ form_label(form.attendees_count) }}
+                {{ form_widget(form.attendees_count) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                {{ form_label(form.attendees_age_from) }}
+                {{ form_widget(form.attendees_age_from) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.attendees_age_to) }}
+                {{ form_widget(form.attendees_age_to) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form_label(form.attendees_notes) }}
+                {{ form_widget(form.attendees_notes) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                {{ form_label(form.dj_notes) }}
+                {{ form_widget(form.dj_notes) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                {{ form_label(form.price_dj_hour) }}
+                {{ form_widget(form.price_dj_hour) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.price_dj_extention) }}
+                {{ form_widget(form.price_dj_extention) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.price_approach) }}
+                {{ form_widget(form.price_approach) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_label(form.price_tech) }}
+                {{ form_widget(form.price_tech) }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Speichern</button>
+                <a href="{{ path('app_appointments_index') }}">
+                    <button type="button" class="btn btn-primary">Zurück zur Liste</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {{ form_row(form._token) }}
+    {{ form_errors(form) }}
+    {{ form_end(form, { 'render_rest': false }) }}
 
-    <a href="{{ path('app_appointments_index') }}">back to list</a>
 
-    {{ include('appointments/_delete_form.html.twig') }}
+    <script>
+        //Buttons
+        const newCustomerButton = document.getElementById('newCustomer');
+        const changeToExistingCustomerButton = document.getElementById('changeToExistingCustomer');
+        const newLocationButton = document.getElementById('newLocation');
+        const changeToExistingLocationButton = document.getElementById('changeToExistingLocation');
+
+        //Areas
+        const customerSelect = document.getElementById('customerSelect');
+        const customerData = document.getElementById('customerData');
+        const locationSelect = document.getElementById('locationSelect');
+        const locationData = document.getElementById('locationData');
+
+        //Event Listeners
+        newCustomerButton.addEventListener('click', function(){
+            customerSelect.classList.add('d-none');
+            newCustomerButton.classList.add('d-none');
+            customerData.classList.remove('d-none');
+        })
+
+        newLocationButton.addEventListener('click', function (){
+            locationSelect.classList.add('d-none');
+            newLocationButton.classList.add('d-none');
+            locationData.classList.remove('d-none');
+        })
+
+        changeToExistingLocationButton.addEventListener('click', function (){
+            locationData.classList.add('d-none');
+            locationSelect.classList.remove('d-none');
+            newLocationButton.classList.remove('d-none');
+        })
+
+        changeToExistingCustomerButton.addEventListener('click', function (){
+            customerData.classList.add('d-none');
+            customerSelect.classList.remove('d-none');
+            newCustomerButton.classList.remove('d-none');
+
+        })
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const checkbox_setup = document.getElementById("appointments_setup_with_location");
+            const checkbox_teardown = document.getElementById("appointments_teardown_with_location");
+            const setupFields = document.getElementById("setup_fields");
+            const teardownFields = document.getElementById("teardown_fields");
+
+            function toggleSetupFields() {
+                if (checkbox_setup.checked) {
+                    setupFields.classList.add("d-none");
+                } else {
+                    setupFields.classList.remove("d-none");
+                }
+            }
+
+            function toggleTeardownFields() {
+                if (checkbox_teardown.checked) {
+                    teardownFields.classList.add("d-none");
+                } else {teardownFields.classList.remove("d-none");
+                }
+            }
+
+            // Initial prüfen beim Laden
+            toggleSetupFields();
+            toggleTeardownFields()
+
+            // Bei Änderung aktualisieren
+            checkbox_setup.addEventListener("change", toggleSetupFields);
+            checkbox_teardown.addEventListener("change", toggleTeardownFields);
+        });
+    </script>
 {% endblock %}
