@@ -16,24 +16,20 @@
                 <th>Datum</th>
                 <th>Start</th>
                 <th>Ende</th>
-                <th>Gäste Anmerkungen</th>
-                <th>DJ Anmerkungen</th>
                 <th>Aktionen</th>
             </tr>
         </thead>
         <tbody>
         {% for appointment in appointments %}
             <tr>
-                <td class="text-nowrap">{{ appointment.occasion }}</td>
-                <td class="text-nowrap">{{ appointment.customer.prename }}</td>
-                <td class="text-nowrap">{{ appointment.customer.lastname }}</td>
-                <td class="text-nowrap">{{ appointment.location.locationName }}</td>
-                <td class="text-nowrap">{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
-                <td class="text-nowrap">{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }} Uhr</td>
-                <td class="text-nowrap">{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }} Uhr</td>
-                <td class="text-nowrap">{{ appointment.attendeesNotes }}</td>
-                <td class="text-nowrap">{{ appointment.djNotes }}</td>
-                <td class="text-nowrap">
+                <td class="text-nowrap-sm">{{ appointment.occasion }}</td>
+                <td class="text-nowrap-sm">{{ appointment.customer.prename }}</td>
+                <td class="text-nowrap-sm">{{ appointment.customer.lastname }}</td>
+                <td class="text-nowrap-sm">{{ appointment.location.locationName }}</td>
+                <td class="text-nowrap-sm">{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
+                <td class="text-nowrap-sm">{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }} Uhr</td>
+                <td class="text-nowrap-sm">{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }} Uhr</td>
+                <td class="text-nowrap-sm">
                     <a class="special-link" href="{{ path('app_appointments_show', {'id': appointment.id}) }}">Anzeigen</a>
                     <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Bearbeiten</a>
                 </td>

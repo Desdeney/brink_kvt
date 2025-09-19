@@ -8,7 +8,7 @@
 
 
 body {
-    background-color: white;
+    background-color: rgb(239, 234, 232);
     font-family: 'Inter', sans-serif;
 }
 
@@ -71,7 +71,7 @@ a{
 
 /* Container für die Tabelle */
 .table-container {
-    background-color: #F5F5F5;
+    background-color: #eee8e8;
     padding: 16px;
     border-radius: 8px;
     overflow-y: auto;   /* Vertikales Scrollen innerhalb des Containers */
@@ -95,7 +95,7 @@ a{
 }
 
 .table th, .table td {
-    background-color: #F5F5F5;
+    background-color: #eee8e8;
     color: #2d2d2d;
     padding: 8px;  /* Innenabstand */
     text-align: left;  /* Text linksbündig */
@@ -138,14 +138,25 @@ a{
     width: 100%;
 }
 
+.sidebar-btn-white{
+    color: white !important;
+}
+
+
 @media(min-width: 798px){
     .nav-width{
-        width: 8%;
+        width: 20vw;
     }
 }
 
 @media(min-width: 1200px){
     .nav-width{
-        width: 10%;
+        width: 20vw;
+    }
+}
+
+@media(max-width: 1200px){
+    .text-nowrap-sm {
+        white-space: nowrap !important;
     }
 }
