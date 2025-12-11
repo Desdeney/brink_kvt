@@ -3,26 +3,65 @@
 .current_user {
     display: flex;
     align-items: center;
+    padding: var(--spacing-md, 16px);
+    background-color: white;
+    border-radius: var(--border-radius, 8px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: var(--spacing-md, 16px);
+    transition: box-shadow 0.3s ease;
+}
+
+.current_user:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .current_user img {
     flex: 0 0 auto;
     display: block;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .current_user .user-info {
     display: flex;
     flex-direction: column;
-    margin-left: 16px;
+    margin-left: var(--spacing-md, 16px);
     min-width: 0;
 }
 
 .current_user .name {
     font-weight: 600;
     line-height: 1.2;
+    font-size: 1.1rem;
+    color: var(--text-dark, #303030);
+}
+
+.current_user .name i {
+    margin-left: var(--spacing, 8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.current_user:hover .name i {
+    opacity: 1;
 }
 
 .current_user .role {
     opacity: 0.8;
     line-height: 1.3;
+    font-size: 0.9rem;
+    color: var(--text-medium, #2d2d2d);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .current_user {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .current_user .user-info {
+        margin-left: 0;
+        margin-top: var(--spacing, 8px);
+    }
 }
