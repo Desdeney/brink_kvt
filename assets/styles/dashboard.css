@@ -1,0 +1,28 @@
+/* Dashboard and User Profile Styles */
+
+.current_user {
+    display: flex;
+    align-items: center;
+}
+
+.current_user img {
+    flex: 0 0 auto;
+    display: block;
+}
+
+.current_user .user-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+    min-width: 0;
+}
+
+.current_user .name {
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.current_user .role {
+    opacity: 0.8;
+    line-height: 1.3;
+}
