@@ -39,6 +39,16 @@ body {
     background: rgba(255, 255, 255, 0.5);
 }
 
+/* Sidebar slide-in animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
 /* Mobile optimization */
 @media (max-width: 767px) {
     .sidebar {

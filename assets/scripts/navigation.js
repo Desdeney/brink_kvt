@@ -39,17 +39,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-// Add slide-in animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(-100%);
-        }
-        to {
-            transform: translateX(0);
-        }
-    }
-`;
-document.head.appendChild(style);
