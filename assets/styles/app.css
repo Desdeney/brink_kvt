@@ -1,161 +1,179 @@
-
+/* CSS Variables for consistent theming */
 :root {
+    --primary-color: #43A4CE;
+    --primary-dark: #2a7593;
+    --primary-hover: #3691B7;
+    --text-dark: #303030;
+    --text-medium: #2d2d2d;
+    --bg-light: rgb(239, 234, 232);
+    --bg-gray: #eee8e8;
+    --bg-container: #e3d8d8;
+    --white: #f9f9f9;
+    --border-color: #e7e7e7;
+    --border-radius: 8px;
+    --border-radius-sm: 4px;
+    --spacing: 8px;
+    --spacing-md: 16px;
+    
+    /* Bootstrap overrides */
     --bs-primary: #43A4CE;
-    --bs-primary-rgb: 14,165,233;
+    --bs-primary-rgb: 67, 164, 206;
     --bs-box-shadow-lg: 0 0 1.67rem rgba(104, 104, 104, 0.79);
---bs-link-color: var(--bs-primary);
+    --bs-link-color: var(--primary-color);
 }
 
-
+/* Base Styles */
 body {
-    background-color: rgb(239, 234, 232);
-    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-h1{
-    font-size: 32px;
+/* Typography */
+h1 {
+    font-size: clamp(20px, 5vw, 32px);
     font-weight: bold;
-    color: #303030;
+    color: var(--text-dark);
 }
 
-h2{
-    font-size: 24px;
+h2 {
+    font-size: clamp(18px, 4vw, 24px);
     font-weight: bold;
-    color: #43A4CE;
+    color: var(--primary-color);
 }
 
-
-label{
+label {
     font-weight: bold;
 }
 
-a{
-    color: #43A4CE;
+/* Links */
+a {
+    color: var(--primary-color);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.special-link{
-    padding: 8px;
-    color: #f9f9f9;
-    background-color: #43A4CE;
-    border-radius: 8px;
+a:hover {
+    color: var(--primary-dark);
 }
 
-.special-link:hover{
-    background-color: #2a7593;
-
+.special-link {
+    padding: var(--spacing);
+    color: var(--white);
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s ease;
 }
 
-.nav-link{
+.special-link:hover {
+    background-color: var(--primary-dark);
+    color: var(--white);
+}
+
+/* Navigation Styles */
+#sidebarMenu {
+    background-color: var(--primary-color);
+}
+
+.nav-link {
     color: white;
     font-size: 18px;
+    transition: font-weight 0.2s ease;
 }
 
-#sidebarMenu{
-    background-color: #43A4CE;
-}
-
-.nav-link.active{
+.nav-link.active {
     font-weight: bold;
 }
 
-.nav-link:hover{
+.nav-link:hover {
     font-weight: bold;
     color: white;
 }
 
-.sidebar-btn{
+.sidebar-btn {
     border: 1px solid black;
-    border-radius: 4px;
-}
-
-/* Container für die Tabelle */
-.table-container {
-    background-color: #eee8e8;
-    padding: 16px;
-    border-radius: 8px;
-    overflow-y: auto;   /* Vertikales Scrollen innerhalb des Containers */
-    -webkit-overflow-scrolling: touch;  /* Smooth scrolling für mobile Geräte */
-}
-/* Scrollbar immer ausblenden */
-.table-container::-webkit-scrollbar {
-    width: 0px;   /* Setzt die Breite der vertikalen Scrollbar auf 0 */
-    background: transparent; /* Hintergrund transparent, um sicherzustellen, dass sie nicht angezeigt wird */
-}
-
-/* Für die horizontale Scrollbar */
-.table-container::-webkit-scrollbar:horizontal {
-    height: 0px;  /* Macht die horizontale Scrollbar unsichtbar */
-}
-
-/* Optionale Verbesserungen für die Tabelle */
-.table {
-    width: 100%;  /* Stellt sicher, dass die Tabelle den verfügbaren Platz einnimmt */
-    border-collapse: collapse;  /* Sorgt für eine saubere Darstellung */
-}
-
-.table th, .table td {
-    background-color: #eee8e8;
-    color: #2d2d2d;
-    padding: 8px;  /* Innenabstand */
-    text-align: left;  /* Text linksbündig */
-    border: 0;
-}
-
-/* Optional: Tabelle horizontal scrollbar für größere Bildschirme */
-@media (max-width: 767px) {
-    .table-container {
-        max-width: 100%;  /* Verhindert horizontales Scrollen auf kleinen Geräten */
-    }
-    h1{
-        font-size: 20px;
-    }
-
-    .show-navbar{
-        display: blocK;
-    }
-}
-
-.setup_date{
-    display: none;
-}
-
-.text-color-brink{
-    color: #43A4CE;
-}
-
-.c-pointer{
+    border-radius: var(--border-radius-sm);
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.shadow-nav{
-    -webkit-box-shadow: 50px 2px 20px 14px rgba(74,74,74,0.8);
-    box-shadow: 50px 2px 20px 14px rgba(74,74,74,0.8);
+.sidebar-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-.nav-width{
+.sidebar-btn-white {
+    color: white !important;
+}
+
+.nav-width {
     flex: 0 0 auto;
     width: 100%;
 }
 
-.sidebar-btn-white{
-    color: white !important;
+/* Table Styles */
+.table-container {
+    background-color: var(--bg-gray);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
+.table-container::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
 
-@media(min-width: 798px){
-    .nav-width{
-        width: 20vw;
+.table-container::-webkit-scrollbar:horizontal {
+    height: 0;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    background-color: var(--bg-gray);
+    color: var(--text-medium);
+    padding: var(--spacing);
+    text-align: left;
+    border: 0;
+}
+
+/* Utility Classes */
+.text-color-brink {
+    color: var(--primary-color);
+}
+
+.c-pointer {
+    cursor: pointer;
+}
+
+.shadow-nav {
+    box-shadow: 50px 2px 20px 14px rgba(74, 74, 74, 0.8);
+}
+
+.setup_date {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .table-container {
+        max-width: 100%;
+    }
+    
+    .show-navbar {
+        display: block;
     }
 }
 
-@media(min-width: 1200px){
-    .nav-width{
+@media (min-width: 768px) {
+    .nav-width {
         width: 20vw;
     }
-}
-
-@media(max-width: 1200px){
+    
     .text-nowrap-sm {
         white-space: nowrap !important;
     }

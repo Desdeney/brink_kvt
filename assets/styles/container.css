@@ -1,14 +1,36 @@
-.content-container{
-    background-color: #e3d8d8;
-    border-radius: 8px;
+/* Content Container Styles */
+
+.content-container {
+    background-color: var(--bg-container, #e3d8d8);
+    border-radius: var(--border-radius, 8px);
+    padding: var(--spacing-md, 16px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Unter Desktop */
-.w-xl-75 { width: 95%; }
-main { margin-left: 0; }
+/* Main content area responsive width */
+.w-xl-75 {
+    width: 95%;
+}
 
-/* Ab Desktop (Bootstrap "xl" = ≥1200px) */
+main {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+}
+
+/* Desktop layout */
 @media (min-width: 1200px) {
-    .w-xl-75 { width: 75%; }
-    main { margin-left: 12vw; }
+    .w-xl-75 {
+        width: 75%;
+    }
+    
+    main {
+        margin-left: 12vw;
+    }
+}
+
+/* Tablet layout */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .w-xl-75 {
+        width: 85%;
+    }
 }
