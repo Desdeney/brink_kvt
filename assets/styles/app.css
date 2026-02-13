@@ -1,162 +1,111 @@
+/* Tabellenzeilen Schriftfarbe */
+table tbody tr td {
+    color: #2c3e50;
+}
 
-:root {
-    --bs-primary: #43A4CE;
-    --bs-primary-rgb: 14,165,233;
-    --bs-box-shadow-lg: 0 0 1.67rem rgba(104, 104, 104, 0.79);
---bs-link-color: var(--bs-primary);
+/* Tabellenkopf Schriftfarbe */
+table thead tr th {
+    color: #5a5c69;
+}
+
+/* Page Header Standardisierung */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #5a5c69;
+    margin: 0;
+}
+
+.page-title i {
+    margin-right: 0.75rem;
+    color: #4e73df;
+}
+
+/* Daten Karten & Tabellen Unifizierung */
+.data-card {
+    border-radius: 15px !important;
+    overflow: hidden !important;
+    border: none !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    background: #ffffff !important;
+}
+
+.data-card .card-header {
+    border: none !important;
+    padding: 1.25rem 1.5rem !important;
+    background: #4e73df;
+    /* Fallback */
+}
+
+.data-card .card-header h6 {
+    color: #ffffff !important;
+    margin: 0 !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+}
+
+.data-table thead {
+    background: #4e73df;
+    /* Standard Blau falls kein Inline-Gradient */
+}
+
+.data-table thead th {
+    border: none !important;
+    color: #ffffff !important;
+    padding: 1rem 1.5rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    background-color: transparent !important;
+}
+
+.page-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 
-body {
-    background-color: rgb(239, 234, 232);
-    font-family: 'Inter', sans-serif;
+.data-table tbody td {
+    padding: 1rem 1.5rem !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f0f1f8 !important;
+    color: #2c3e50 !important;
 }
 
-h1{
-    font-size: 32px;
-    font-weight: bold;
-    color: #303030;
+.data-table tbody tr:last-child td {
+    border-bottom: none !important;
 }
 
-h2{
-    font-size: 24px;
-    font-weight: bold;
-    color: #43A4CE;
+.data-table tbody tr {
+    transition: background-color 0.2s ease;
 }
 
-
-label{
-    font-weight: bold;
+.data-table tbody tr:hover {
+    background-color: #f8f9fc !important;
 }
 
-a{
-    color: #43A4CE;
-    text-decoration: none;
+/* Button & Badge Standard-Radius */
+.btn-standard {
+    border-radius: 10px !important;
+    padding: 0.5rem 1.25rem !important;
+    font-weight: 600 !important;
+    border: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-.special-link{
-    padding: 8px;
-    color: #f9f9f9;
-    background-color: #43A4CE;
-    border-radius: 8px;
-}
-
-.special-link:hover{
-    background-color: #2a7593;
-
-}
-
-.nav-link{
-    color: white;
-    font-size: 18px;
-}
-
-#sidebarMenu{
-    background-color: #43A4CE;
-}
-
-.nav-link.active{
-    font-weight: bold;
-}
-
-.nav-link:hover{
-    font-weight: bold;
-    color: white;
-}
-
-.sidebar-btn{
-    border: 1px solid black;
-    border-radius: 4px;
-}
-
-/* Container für die Tabelle */
-.table-container {
-    background-color: #eee8e8;
-    padding: 16px;
-    border-radius: 8px;
-    overflow-y: auto;   /* Vertikales Scrollen innerhalb des Containers */
-    -webkit-overflow-scrolling: touch;  /* Smooth scrolling für mobile Geräte */
-}
-/* Scrollbar immer ausblenden */
-.table-container::-webkit-scrollbar {
-    width: 0px;   /* Setzt die Breite der vertikalen Scrollbar auf 0 */
-    background: transparent; /* Hintergrund transparent, um sicherzustellen, dass sie nicht angezeigt wird */
-}
-
-/* Für die horizontale Scrollbar */
-.table-container::-webkit-scrollbar:horizontal {
-    height: 0px;  /* Macht die horizontale Scrollbar unsichtbar */
-}
-
-/* Optionale Verbesserungen für die Tabelle */
-.table {
-    width: 100%;  /* Stellt sicher, dass die Tabelle den verfügbaren Platz einnimmt */
-    border-collapse: collapse;  /* Sorgt für eine saubere Darstellung */
-}
-
-.table th, .table td {
-    background-color: #eee8e8;
-    color: #2d2d2d;
-    padding: 8px;  /* Innenabstand */
-    text-align: left;  /* Text linksbündig */
-    border: 0;
-}
-
-/* Optional: Tabelle horizontal scrollbar für größere Bildschirme */
-@media (max-width: 767px) {
-    .table-container {
-        max-width: 100%;  /* Verhindert horizontales Scrollen auf kleinen Geräten */
-    }
-    h1{
-        font-size: 20px;
-    }
-
-    .show-navbar{
-        display: blocK;
-    }
-}
-
-.setup_date{
-    display: none;
-}
-
-.text-color-brink{
-    color: #43A4CE;
-}
-
-.c-pointer{
-    cursor: pointer;
-}
-
-.shadow-nav{
-    -webkit-box-shadow: 50px 2px 20px 14px rgba(74,74,74,0.8);
-    box-shadow: 50px 2px 20px 14px rgba(74,74,74,0.8);
-}
-
-.nav-width{
-    flex: 0 0 auto;
-    width: 100%;
-}
-
-.sidebar-btn-white{
-    color: white !important;
-}
-
-
-@media(min-width: 798px){
-    .nav-width{
-        width: 20vw;
-    }
-}
-
-@media(min-width: 1200px){
-    .nav-width{
-        width: 20vw;
-    }
-}
-
-@media(max-width: 1200px){
-    .text-nowrap-sm {
-        white-space: nowrap !important;
-    }
+.btn-standard:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }

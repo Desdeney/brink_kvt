@@ -12,17 +12,29 @@ class ContactsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('prename')
-            ->add('lastname')
-            ->add('email')
-            ->add('phone')
-        ;
+            ->add('prename', null, [
+            'label' => 'Vorname',
+            'attr' => ['placeholder' => 'Vorname eingeben']
+        ])
+            ->add('lastname', null, [
+            'label' => 'Nachname',
+            'attr' => ['placeholder' => 'Nachname eingeben']
+        ])
+            ->add('email', null, [
+            'label' => 'E-Mail',
+            'attr' => ['placeholder' => 'email@beispiel.de']
+        ])
+            ->add('phone', null, [
+            'label' => 'Telefon',
+            'attr' => ['placeholder' => '+49 123 456789']
+        ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Contacts::class,
+            'data_class' => Contacts::class ,
         ]);
     }
 }

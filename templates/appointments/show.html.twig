@@ -7,163 +7,248 @@
 {% block body %}
 
     {% set diff = 0 %}
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <div class="table-container mt-4 mb-4">
-                <h2>Informationen zur Location</h2>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td><a href="{{ path('app_location_show', { id: appointment.location.id }) }}" target="_blank">{{ appointment.location.locationName }}</a><br>
-                            {{ appointment.location.street }} {{ appointment.location.streetnr }}<br>
-                            {{ appointment.location.postal }} {{ appointment.location.city }}
-                            <br><br>
-                            <strong>Notizen zur Location</strong><br>
-                            {{ appointment.location.notes }}<br><br></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="table-container mt-4 mb-4">
-                <h2>Informationen zum Kunden</h2>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td><a href="{{ path('app_customer_edit', { id: appointment.customer.id }) }}" target="_blank">{{ appointment.customer.prename }} {{ appointment.customer.lastname }}</a><br>
-                            {{ appointment.customer.street }} {{ appointment.customer.housenr }}<br>
-                            {{ appointment.customer.postal }} {{ appointment.customer.city }}<br><br>
-                            <strong>Informationen zur Zahlung</strong><br>
-                            {% if appointment.customer.requireCash == true %}
-                            <span>Barzahlung erforderlich</span><br>
-                            {% else %}
-                            <span>{{ appointment.customer.payment.name }}</span><br>
-                            {% endif %}
-                            {{ appointment.customer.requirePrepaid ? "Vorkasse erforderlich" : "Keine Vorkasse erforderlich."}}</td>
-                        </td>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-calendar-check text-primary"></i>Termindetails: {{ appointment.occasion }}
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_appointments_index') }}" class="btn btn-outline-secondary btn-standard shadow-sm">
+                <i class="fas fa-arrow-left me-2"></i>Zurück
+            </a>
+            <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}" class="btn btn-primary btn-standard shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-edit me-2"></i>Bearbeiten
+            </a>
         </div>
     </div>
-    <div class="table-container mb-4">
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Datum der Veranstaltung</th>
-                <td>{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Beginn (Uhrzeit)</th>
-                <td>{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }} Uhr</td>
-            </tr>
-            <tr>
-                <th>Ende (Uhrzeit)</th>
-                <td>{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }} Uhr</td>
-            </tr>
-            <tr>
-                <th>Dauer</th>
-                <td>
-                    {% if appointment.startTime and appointment.endTime %}
-                        {% set start = appointment.startTime|date('U') %}
-                        {% set end = appointment.endTime|date('U') %}
-                        {% if end < start %}
-                            {% set end = end + 86400 %} {# +24h, wenn Ende nach Mitternacht liegt #}
-                        {% endif %}
-                        {% set diff = (end - start) / 3600 %}
-                        {{ diff|round(0, 'floor') }} Stunden
-                    {% endif %}
-                </td>
-            </tr>
 
-            <tr>
-                <th>Bestätigt?</th>
-                <td>{{ appointment.isConfirmed ? 'Ja' : 'Nein' }}</td>
-            </tr>
-            <tr>
-                <th>Aufbau geklärt?</th>
-                <td>{{ appointment.setupWithLocation ? 'Ist abgeklärt' : 'Nicht abgeklärt' }}</td>
-            </tr>
-            <tr>
-                <th>Abbau geklärt?</th>
-                <td>{{ appointment.teardownWithLocation ? 'Ist abgeklärt' : 'Nicht abgeklärt'  }}</td>
-            </tr>
-            {% if appointment.setupWithLocation == false %}
-            <tr>
-                <th>Aufbau Datum</th>
-                <td>{{ appointment.setupDate ? appointment.setupDate|date('d.m.Y') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Aufbau Zeit</th>
-                <td>{{ appointment.setupTime ? appointment.setupTime|date('H:i') : '' }} Uhr</td>
-            </tr>
-            {% endif %}
-            {% if appointment.teardownWithLocation == false %}
-            <tr>
-                <th>Abbau Datum</th>
-                <td>{{ appointment.teardownDate ? appointment.teardownDate|date('d.m.Y') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Abbau Zeit</th>
-                <td>{{ appointment.teardownTime ? appointment.teardownTime|date('H:i') : '' }} Uhr</td>
-            </tr>
-            {% endif %}
-            <tr>
-                <th>Gäste</th>
-                <td>{{ appointment.attendeesCount }}</td>
-            </tr>
-            <tr>
-                <th>Gästealter von</th>
-                <td>{{ appointment.attendeesAgeFrom }}</td>
-            </tr>
-            <tr>
-                <th>Gästealter bis</th>
-                <td>{{ appointment.attendeesAgeTo }}</td>
-            </tr>
-            <tr>
-                <th>Informationen zu den Gästen</th>
-                <td>{{ appointment.attendeesNotes }}</td>
-            </tr>
-            <tr>
-                <th>Musikfragebogen PDF</th>
-                <td>{{ appointment.musicPdfPath ? 'Hinterlegt' : 'Nicht hinterlegt' }}</td>
-            </tr>
-            <tr>
-                <th>Notizen für den DJ</th>
-                <td>{{ appointment.djNotes }}</td>
-            </tr>
-            <tr>
-                <th>DJ Preis (Stunde)</th>
-                <td>{{ appointment.priceDjHour }} €/Stunde</td>
-            </tr>
-            <tr>
-                <th>Verlängerung / Stunde</th>
-                <td>{{ appointment.priceDjExtention }} €/Stunde</td>
-            </tr>
-            <tr>
-                <th>Preis Technik</th>
-                <td>{{ appointment.priceTech }} €</td>
-            </tr>
-            {% if appointment.priceApproach > 0 %}
-            <tr>
-                <th>Anfahrtskosten</th>
-                <td>{{ appointment.priceApproach }} €</td>
-            </tr>
-            {% endif %}
-            <tr style="border-top: 2px dashed #43A4CE;">
-                <th>Gesamtkosten</th>
-                <td>{{ (appointment.priceDjHour*diff)+appointment.priceTech+appointment.priceApproach }} €</td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
+    {% set diff = 0 %}
+    {% if appointment.startTime and appointment.endTime %}
+        {% set start = appointment.startTime|date('U') %}
+        {% set end = appointment.endTime|date('U') %}
+        {% if end < start %}
+            {% set end = end + 86400 %}
+        {% endif %}
+        {% set diff = (end - start) / 3600 %}
+    {% endif %}
+
     <div class="row">
-        <div class="col-12">
-            <a class="special-link" href="{{ path('app_appointments_index') }}">Alle Termine ansehen</a>
-            <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Termin bearbeiten</a>
+        <!-- Haupt-Info Karte -->
+        <div class="col-xl-8">
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-info-circle me-2"></i>Veranstaltungsdetails</h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table data-table mb-0">
+                        <tbody>
+                            <tr>
+                                <th width="30%">Datum</th>
+                                <td><i class="fas fa-calendar-day me-2 text-muted"></i><strong>{{ appointment.date|date('d.m.Y') }}</strong></td>
+                            </tr>
+                            <tr>
+                                <th>Zeitraum</th>
+                                <td>
+                                    <i class="fas fa-clock me-2 text-muted"></i>
+                                    {{ appointment.startTime|date('H:i') }} - {{ appointment.endTime|date('H:i') }} Uhr 
+                                    <span class="badge bg-light text-primary border ms-2">{{ diff|round(1) }} Stunden</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    {% if appointment.isConfirmed %}
+                                        <span class="badge rounded-pill bg-success-soft" style="background-color: #d1e7dd; color: #0f5132; padding: 0.5rem 1rem;">
+                                            <i class="fas fa-check-circle me-1"></i>Bestätigt
+                                        </span>
+                                    {% else %}
+                                        <span class="badge rounded-pill bg-warning-soft" style="background-color: #fff3cd; color: #664d03; padding: 0.5rem 1rem;">
+                                            <i class="fas fa-clock me-1"></i>Ausstehend
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Gäste</th>
+                                <td>
+                                    <i class="fas fa-users me-2 text-muted"></i>
+                                    {{ appointment.attendeesCount }} Personen ({{ appointment.attendeesAgeFrom }} bis {{ appointment.attendeesAgeTo }} Jahre)
+                                </td>
+                            </tr>
+                            {% if appointment.attendeesNotes %}
+                            <tr>
+                                <th>Gäste-Infos</th>
+                                <td class="text-muted small">{{ appointment.attendeesNotes }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Kalkulation Karte -->
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-calculator me-2"></i>Kalkulation</h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table data-table mb-0">
+                        <tbody>
+                            <tr>
+                                <th width="30%">DJ Honorar</th>
+                                <td>{{ appointment.priceDjHour|number_format(2, ',', '.') }} €/Std. × {{ diff|round(1) }} Std. = <strong>{{ (appointment.priceDjHour * diff)|number_format(2, ',', '.') }} €</strong></td>
+                            </tr>
+                            <tr>
+                                <th>Technik</th>
+                                <td>{{ appointment.priceTech|number_format(2, ',', '.') }} €</td>
+                            </tr>
+                            {% if appointment.priceApproach > 0 %}
+                            <tr>
+                                <th>Anfahrt</th>
+                                <td>{{ appointment.priceApproach|number_format(2, ',', '.') }} €</td>
+                            </tr>
+                            {% endif %}
+                            <tr class="table-light">
+                                <th class="text-primary">Gesamtbetrag</th>
+                                <td class="text-primary font-weight-bold" style="font-size: 1.2rem;">
+                                    {{ ((appointment.priceDjHour * diff) + appointment.priceTech + appointment.priceApproach)|number_format(2, ',', '.') }} €
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Info (Kunde & Location) -->
+        <div class="col-xl-4">
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-user text-white me-2"></i>Kunde</h6>
+                </div>
+                <div class="card-body">
+                    <h5 class="font-weight-bold mb-1">{{ appointment.customer.prename }} {{ appointment.customer.lastname }}</h5>
+                    <p class="text-muted small mb-3">
+                        <i class="fas fa-map-marker-alt me-1"></i> {{ appointment.customer.street }} {{ appointment.customer.housenr }}, {{ appointment.customer.postal }} {{ appointment.customer.city }}
+                    </p>
+                    <div class="d-grid">
+                        <a href="{{ path('app_customer_show', { id: appointment.customer.id }) }}" class="btn btn-light btn-sm border">
+                            <i class="fas fa-external-link-alt me-1"></i>Kundenakte öffnen
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-map-marked-alt text-white me-2"></i>Location</h6>
+                </div>
+                <div class="card-body">
+                    <h5 class="font-weight-bold mb-1">{{ appointment.location.locationName }}</h5>
+                    <p class="text-muted small mb-3">
+                        <i class="fas fa-map-marker-alt me-1"></i> {{ appointment.location.street }} {{ appointment.location.streetnr }}, {{ appointment.location.postal }} {{ appointment.location.city }}
+                    </p>
+                    {% if appointment.location.notes %}
+                        <div class="alert alert-light border small mb-3">
+                            <strong>Hausregeln/Notizen:</strong><br>
+                            {{ appointment.location.notes }}
+                        </div>
+                    {% endif %}
+                    <div class="d-grid">
+                        <a href="{{ path('app_location_show', { id: appointment.location.id }) }}" class="btn btn-light btn-sm border">
+                            <i class="fas fa-external-link-alt me-1"></i>Location-Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checklisten Sektion -->
+    <div class="card data-card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-tasks me-2"></i>Checklisten</h6>
+            <form action="{{ path('app_checklist_add', {'id': appointment.id}) }}" method="post" class="d-flex align-items-center">
+                <select name="template_id" class="form-select form-select-sm me-2" style="width: auto; border-radius: 8px;">
+                    <option value="">-- Neue Checkliste --</option>
+                    {% for template in checklist_templates|default([]) %}
+                        <option value="{{ template.id }}">{{ template.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-light btn-sm font-weight-bold px-3" style="border-radius: 8px;">
+                    <i class="fas fa-plus me-1 text-primary"></i> Erstellen
+                </button>
+            </form>
+        </div>
+        <div class="card-body p-0">
+            {% if appointment.checklists|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table data-table table-hover mb-0">
+                        <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <tr>
+                                <th class="ps-4 text-white">Name</th>
+                                <th class="text-white">Status</th>
+                                <th class="text-white">Sichtbarkeit</th>
+                                <th class="text-white">Abgeschlossen</th>
+                                <th class="text-end pe-4 text-white">Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for checklist in appointment.checklists %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <i class="fas fa-clipboard-check me-2 text-muted"></i>
+                                        <strong>{{ checklist.title }}</strong>
+                                    </td>
+                                    <td>
+                                        {% if checklist.isCompleted %}
+                                            <span class="badge bg-success shadow-sm">Abgeschlossen</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark shadow-sm">In Bearbeitung</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <form action="{{ path('app_checklist_toggle_public', {'id': checklist.id}) }}" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm {{ checklist.isPublic ? 'btn-success' : 'btn-outline-secondary' }} btn-standard" style="padding: 0.25rem 0.75rem !important; font-size: 0.7rem !important;">
+                                                <i class="fas {{ checklist.isPublic ? 'fa-globe-europe' : 'fa-lock' }} me-1"></i>
+                                                {{ checklist.isPublic ? 'Öffentlich' : 'Privat' }}
+                                            </button>
+                                        </form>
+                                        {% if checklist.isPublic %}
+                                            <div class="mt-2" style="max-width: 200px;">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-link text-muted" style="font-size: 0.7rem;"></i></span>
+                                                    <input type="text" class="form-control form-control-sm border-start-0" readonly value="{{ url('app_checklist_public', {'token': checklist.publicToken}) }}" onclick="this.select();" style="font-size: 0.65rem;">
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-muted">{{ checklist.completedAt ? checklist.completedAt|date('d.m.Y H:i') : '-' }}</td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group">
+                                            <a href="{{ path('app_checklist_show', {'id': checklist.id}) }}" class="btn btn-light btn-sm border" title="Bearbeiten">
+                                                <i class="fas fa-edit text-primary"></i>
+                                            </a>
+                                            <a href="{{ path('app_checklist_pdf', {'id': checklist.id}) }}" class="btn btn-light btn-sm border" title="PDF">
+                                                <i class="fas fa-file-pdf text-danger"></i>
+                                            </a>
+                                            <form action="{{ path('app_checklist_email', {'id': checklist.id}) }}" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-light btn-sm border" title="E-Mail">
+                                                    <i class="fas fa-envelope text-info"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="fas fa-clipboard-list fa-3x mb-3 opacity-25"></i>
+                    <p>Noch keine Checklisten für diesen Termin angelegt.</p>
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="mb-5"></div>

@@ -1,0 +1,272 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkliste: {{ checklist.title }} | Brink VA{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ checklist.title }}</h1>
+        <div class="d-flex gap-2">
+            <div class="btn-group shadow-sm">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-download me-2"></i> Export
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ path('app_checklist_pdf', {'id': checklist.id}) }}"><i class="fas fa-file-pdf me-2 text-danger"></i> Als PDF laden</a></li>
+                    <li>
+                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('email-form-{{ checklist.id }}').submit();">
+                            <i class="fas fa-envelope me-2 text-primary"></i> Per E-Mail senden
+                        </a>
+                        <form id="email-form-{{ checklist.id }}" action="{{ path('app_checklist_email', {'id': checklist.id}) }}" method="post" style="display:none;"></form>
+                    </li>
+                </ul>
+            </div>
+            <a href="{{ path('app_appointments_show', {'id': checklist.appointment.id}) }}" class="btn btn-outline-secondary btn-sm shadow-sm">
+                <i class="fas fa-arrow-left me-2"></i> Zurück zum Termin
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Form Area -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Checkliste ausfüllen</h6>
+                    {% if checklist.isCompleted %}
+                        <span class="badge bg-success">Ausgefüllt am {{ checklist.completedAt|date('d.m.Y H:i') }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <form method="post" id="checklistForm">
+                        {% for question in checklist.questions %}
+                            <div class="mb-4 p-3 border rounded bg-light">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <label class="form-label mb-0 fw-bold flex-grow-1">
+                                        {{ question.questionText }}
+                                        {% if question.isRequired %}<span class="text-danger">*</span>{% endif %}
+                                    </label>
+                                    <button type="button" class="btn btn-outline-danger btn-sm border-0 p-2 ms-2" title="Frage löschen" onclick="if(confirm('Frage wirklich entfernen?')) document.getElementById('delete_question_{{ question.id }}').submit();">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                                
+                                {% if question.fieldType == 'text' %}
+                                    <input type="text" name="responses[{{ question.id }}]" class="form-control shadow-sm" value="{{ question.answer }}" {% if question.isRequired %}required{% endif %}>
+                                {% elseif question.fieldType == 'textarea' %}
+                                    <textarea name="responses[{{ question.id }}]" class="form-control shadow-sm" rows="3" {% if question.isRequired %}required{% endif %}>{{ question.answer }}</textarea>
+                                {% elseif question.fieldType == 'select' %}
+                                    <select name="responses[{{ question.id }}]" class="form-select shadow-sm" {% if question.isRequired %}required{% endif %}>
+                                        <option value="">-- Bitte wählen --</option>
+                                        {% for option in question.fieldOptions|default([]) %}
+                                            <option value="{{ option }}" {% if question.answer == option %}selected{% endif %}>{{ option }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% elseif question.fieldType == 'checkbox' %}
+                                    <div class="form-check form-switch custom-switch">
+                                        <input type="checkbox" name="responses[{{ question.id }}]" class="form-check-input" value="1" {% if question.answer == '1' %}checked{% endif %} id="q_{{ question.id }}">
+                                        <label class="form-check-label ms-2" for="q_{{ question.id }}">Erledigt / Ja</label>
+                                    </div>
+                                {% elseif question.fieldType == 'radio' %}
+                                    {% for option in question.fieldOptions|default([]) %}
+                                        <div class="form-check">
+                                            <input type="radio" name="responses[{{ question.id }}]" class="form-check-input" value="{{ option }}" {% if question.answer == option %}checked{% endif %} id="q_{{ question.id }}_{{ loop.index }}" {% if question.isRequired %}required{% endif %}>
+                                            <label class="form-check-label" for="q_{{ question.id }}_{{ loop.index }}">{{ option }}</label>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5 text-muted">
+                                <i class="fas fa-question-circle fa-3x mb-3"></i>
+                                <p>Diese Checkliste enthält noch keine Fragen.</p>
+                                <button type="button" class="btn btn-primary btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+                                    <i class="fas fa-plus me-2"></i> Erste Frage hinzufügen
+                                </button>
+                            </div>
+                        {% endfor %}
+
+                        {% if checklist.questions|length > 0 %}
+                            <div class="mt-4 pt-3 border-top d-flex gap-2">
+                                <button type="submit" class="btn btn-primary px-4 shadow-sm rounded-pill">
+                                    <i class="fas fa-save me-2"></i> Antworten speichern
+                                </button>
+                                <button type="button" class="btn btn-success shadow-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+                                    <i class="fas fa-plus me-2"></i> Neue Frage
+                                </button>
+                            </div>
+                        {% endif %}
+                    </form>
+
+                    <!-- Hidden Delete Forms -->
+                    {% for question in checklist.questions %}
+                        <form id="delete_question_{{ question.id }}" action="{{ path('app_checklist_question_delete', {'id': question.id}) }}" method="post" style="display:none;"></form>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Area -->
+        <div class="col-lg-4">
+            <!-- Settings Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-cog me-2"></i> Einstellungen</h6>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title) }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label d-block text-muted small fw-bold text-uppercase">Sichtbarkeit</label>
+                            <div class="form-check form-switch ps-5 mb-2">
+                                {{ form_widget(form.isPublic, {'attr': {'class': 'form-check-input', 'style': 'margin-left: -2.5em;'}}) }}
+                                {{ form_label(form.isPublic, null, {'label_attr': {'class': 'form-check-label ms-2'}}) }}
+                            </div>
+                        </div>
+                        <div id="passwordSection" style="{{ checklist.isPublic ? '' : 'display:none;' }}" class="border-top pt-3 mt-3">
+                            {{ form_row(form.publicPassword) }}
+                            {% if checklist.isPublic %}
+                                <div class="p-3 bg-light rounded border small">
+                                    <label class="text-muted fw-bold text-uppercase mb-1 d-block" style="font-size: 0.7rem;">Öffentlicher Link</label>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control bg-white border-end-0" readonly value="{{ url('app_checklist_public', {'token': checklist.publicToken}) }}" id="publicLink">
+                                        <button class="btn btn-outline-primary border-start-0" type="button" onclick="const el = document.getElementById('publicLink'); el.select(); navigator.clipboard.writeText(el.value); this.innerHTML = '<i class=\'fas fa-check\'></i>'; setTimeout(() => this.innerHTML = '<i class=\'fas fa-copy\'></i>', 2000);">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    {% if checklist.publicPassword %}
+                                        <div class="mt-2 text-warning">
+                                            <i class="fas fa-lock me-1"></i> Passwort erforderlich
+                                        </div>
+                                    {% else %}
+                                        <div class="mt-2 text-info">
+                                            <i class="fas fa-unlock me-1"></i> Kein Passwort
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm w-100 mt-4 rounded-pill shadow-sm">
+                            <i class="fas fa-sync-alt me-2"></i> Konfiguration speichern
+                        </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            <!-- Promotion Card -->
+            <div class="card shadow mb-4 border-0 bg-gradient-primary text-white overflow-hidden">
+                <div class="card-body position-relative py-4">
+                    <div style="opacity: 0.1; position: absolute; right: -20px; bottom: -20px; font-size: 8rem; transform: rotate(-15deg);">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <h6 class="font-weight-bold">Tipp</h6>
+                    <p class="small mb-0">Öffentliche Checklisten eignen sich hervorragend, um Informationen direkt von Kunden einzuholen.</p>
+                </div>
+            </div>
+
+            <!-- Delete Card -->
+            <div class="card shadow mb-4 border-left-danger border-0">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="font-weight-bold text-danger mb-0">Gefahrenzone</h6>
+                        <small class="text-muted">Checkliste unwiderruflich löschen.</small>
+                    </div>
+                    <form method="post" action="{{ path('app_checklist_delete', {'id': checklist.id}) }}" onsubmit="return confirm('Checkliste unwiderruflich löschen?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ checklist.id) }}">
+                        <button class="btn btn-outline-danger btn-sm rounded-pill px-3">Löschen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Question Modal -->
+<div class="modal fade" id="addQuestionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{{ path('app_checklist_question_add', {'id': checklist.id}) }}" method="post">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i> Neue Frage hinzufügen</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Worum geht es in der Frage?</label>
+                        <input type="text" name="question_text" class="form-control form-control-lg border-2 shadow-none" placeholder="z.B. Equipment geliefert?" required autofocus>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Antwort-Typ</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="radio" class="btn-check" name="field_type" id="type_text" value="text" checked>
+                                <label class="btn btn-outline-secondary w-100 py-3" for="type_text">
+                                    <i class="fas fa-font mb-2 d-block fa-lg"></i>
+                                    Kurze Textzeile
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <input type="radio" class="btn-check" name="field_type" id="type_textarea" value="textarea">
+                                <label class="btn btn-outline-secondary w-100 py-3" for="type_textarea">
+                                    <i class="fas fa-align-left mb-2 d-block fa-lg"></i>
+                                    Langer Text
+                                </label>
+                            </div>
+                            <div class="col-6">
+                                <input type="radio" class="btn-check" name="field_type" id="type_checkbox" value="checkbox">
+                                <label class="btn btn-outline-secondary w-100 py-3" for="type_checkbox">
+                                    <i class="fas fa-check-square mb-2 d-block fa-lg"></i>
+                                    Checkbox
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-light border small text-muted">
+                        <i class="fas fa-info-circle me-1"></i> Für Auswahlmenüs und Radio-Buttons nutzen Sie bitte die globalen Templates in den Einstellungen.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-link text-muted me-auto" data-bs-toggle="modal" data-bs-target="#addQuestionModal" style="visibility: hidden;">Placeholder</button>
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addQuestionModal" onclick="bootstrap.Modal.getInstance(document.getElementById('addQuestionModal')).hide()">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">Frage speichern</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.custom-switch .form-check-input {
+    width: 2.5em;
+    height: 1.25em;
+}
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+}
+.form-check-input:checked {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const isPublicCheckbox = document.getElementById('checklist_settings_isPublic');
+    const passwordSection = document.getElementById('passwordSection');
+
+    if (isPublicCheckbox) {
+        isPublicCheckbox.addEventListener('change', () => {
+            if (isPublicCheckbox.checked) {
+                passwordSection.style.display = 'block';
+                // Slide down effect could be added here
+            } else {
+                passwordSection.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,47 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Termine{% endblock %}
-
-{% block header %}Termine{% endblock %}
+{% block title %}Termine | Brink VA{% endblock %}
 
 {% block body %}
-    <div class="table-container mt-5">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Anlass</th>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>Location</th>
-                <th>Datum</th>
-                <th>Start</th>
-                <th>Ende</th>
-                <th>Aktionen</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for appointment in appointments %}
-            <tr>
-                <td class="text-nowrap-sm">{{ appointment.occasion }}</td>
-                <td class="text-nowrap-sm">{{ appointment.customer.prename }}</td>
-                <td class="text-nowrap-sm">{{ appointment.customer.lastname }}</td>
-                <td class="text-nowrap-sm">{{ appointment.location.locationName }}</td>
-                <td class="text-nowrap-sm">{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</td>
-                <td class="text-nowrap-sm">{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }} Uhr</td>
-                <td class="text-nowrap-sm">{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }} Uhr</td>
-                <td class="text-nowrap-sm">
-                    <a class="special-link" href="{{ path('app_appointments_show', {'id': appointment.id}) }}">Anzeigen</a>
-                    <a class="special-link" href="{{ path('app_appointments_edit', {'id': appointment.id}) }}">Bearbeiten</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="23">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-calendar-alt text-primary"></i>Terminverwaltung
+        </h1>
+        <a href="{{ path('app_appointments_new') }}" class="btn btn-primary btn-standard shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-plus fa-sm text-white-50 me-2"></i> Neuer Termin
+        </a>
     </div>
-    <div class="mt-4"></div>
-    <a class="special-link" href="{{ path('app_appointments_new') }}">Neuen Termin anlegen</a>
+
+    <div class="card data-card shadow mb-4">
+        <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h6 class="m-0 font-weight-bold text-white">Alle Termine</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table data-table table-hover mb-0">
+                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <tr>
+                            <th class="py-3 px-4 text-white">Anlass</th>
+                            <th class="py-3 text-white">Kunde</th>
+                            <th class="py-3 text-white">Location</th>
+                            <th class="py-3 text-white">Datum</th>
+                            <th class="py-3 text-white">Start</th>
+                            <th class="py-3 text-white">Ende</th>
+                            <th class="py-3 text-center text-white">Status</th>
+                            <th class="py-3 text-end px-4 text-white">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: #f8f9fc;">
+                    {% for appointment in appointments %}
+                        <tr style="transition: all 0.2s ease;">
+                            <td class="py-3 px-4">
+                                <i class="fas fa-star me-2" style="color: #95a5a6;"></i>
+                                <strong>{{ appointment.occasion }}</strong>
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-user me-2" style="color: #95a5a6;"></i>
+                                {{ appointment.customer.prename }} {{ appointment.customer.lastname }}
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-map-marker-alt me-2" style="color: #95a5a6;"></i>
+                                {{ appointment.location.locationName }}
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-calendar me-2" style="color: #95a5a6;"></i>
+                                {{ appointment.date ? appointment.date|date('d.m.Y') : '' }}
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-clock me-2" style="color: #95a5a6;"></i>
+                                {{ appointment.startTime ? appointment.startTime|date('H:i') : '' }}
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-clock me-2" style="color: #95a5a6;"></i>
+                                {{ appointment.endTime ? appointment.endTime|date('H:i') : '' }}
+                            </td>
+                            <td class="text-center py-3">
+                                {% if appointment.isConfirmed %}
+                                    <span class="badge rounded-pill" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-check-circle me-1"></i>Bestätigt
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-clock me-1"></i>Offen
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end py-3 px-4">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_appointments_show', {'id': appointment.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;"
+                                       title="Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;"
+                                       title="Bearbeiten">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-5" style="background-color: #f8f9fc;">
+                                <i class="fas fa-calendar-times fa-3x mb-3 d-block" style="color: #d1d3e2;"></i>
+                                <p class="mb-0" style="color: #858796;">Keine Termine gefunden</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

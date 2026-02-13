@@ -244,6 +244,35 @@
                 {{ form_widget(form.price_tech) }}
             </div>
         </div>
+
+        <h2 class="mt-5"> Mietgegenstände / Objekte </h2>
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div id="order-fields-list" 
+                     data-prototype="{{ '<div class="row g-3"><div class="col-md-8">' ~ form_widget(form.orders.vars.prototype.object_id, {'attr': {'class': 'form-select form-select-lg'}}) ~ '</div><div class="col-md-3">' ~ form_widget(form.orders.vars.prototype.amount, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Anzahl'}}) ~ '</div></div>' | e('html_attr') }}"
+                     data-widget-tags="{{ '<div class="order-item mb-3 p-3 border rounded-3 bg-light position-relative"></div>'|e('html_attr') }}"
+                     data-widget-counter="{{ form.orders|length }}">
+                    {% for orderField in form.orders %}
+                        <div class="order-item mb-3 p-3 border rounded-3 bg-light position-relative">
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    {{ form_widget(orderField.object_id, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_widget(orderField.amount, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-item" style="border-radius: 8px;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-sm btn-success add-another-collection-widget mt-2">
+                    <i class="fas fa-plus me-1"></i> Objekt hinzufügen
+                </button>
+            </div>
+        </div>
         <div class="row mb-4">
             <div class="col-md-3">
                 <button type="submit" class="btn btn-primary">Speichern</button>
@@ -321,10 +350,42 @@
             // Initial prüfen beim Laden
             toggleSetupFields();
             toggleTeardownFields()
-
+            
             // Bei Änderung aktualisieren
             checkbox_setup.addEventListener("change", toggleSetupFields);
             checkbox_teardown.addEventListener("change", toggleTeardownFields);
+
+            // Objects Collection JS
+            const list = document.querySelector('#order-fields-list');
+            const addButton = document.querySelector('.add-another-collection-widget');
+            
+            addButton.addEventListener('click', function(e) {
+                const counter = parseInt(list.dataset.widgetCounter);
+                const prototype = list.dataset.prototype;
+                const tags = list.dataset.widgetTags;
+                
+                const newWidget = prototype.replace(/__name__/g, counter);
+                list.dataset.widgetCounter = counter + 1;
+                
+                const container = document.createElement('div');
+                container.innerHTML = tags;
+                const item = container.firstElementChild;
+                item.innerHTML = newWidget;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-item';
+                removeBtn.style.borderRadius = '8px';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = function() { item.remove(); };
+                
+                item.appendChild(removeBtn);
+                list.appendChild(item);
+            });
+
+            list.querySelectorAll('.remove-item').forEach(btn => {
+                btn.onclick = function() { btn.closest('.order-item').remove(); };
+            });
         });
     </script>
 {% endblock %}

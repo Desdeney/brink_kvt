@@ -50,8 +50,66 @@ final class AppointmentsController extends AbstractController
             // 2) Falls KEINE bestehende Location gewählt wurde, aber "Neue Location" ausgefüllt ist → anlegen
             if (null === $appointment->getLocation()) {
                 if ($newLocation = $this->getSubmittedNewLocation($form)) {
+                    // Check for new Contact in Location form
+                    $newContact = $this->getSubmittedNewContactFromLocation($form);
+                    if ($newContact) {
+                        $entityManager->persist($newContact);
+                        $newLocation->setContactId($newContact);
+                    }
                     $entityManager->persist($newLocation);
                     $appointment->setLocation($newLocation);
+                }
+            }
+
+            // --- Verfügbarkeitsprüfung für Objekte ---
+            $date = $appointment->getDate();
+            foreach ($appointment->getOrders() as $order) {
+                $object = $order->getObjectId();
+                $requestedAmount = $order->getAmount();
+                
+                if ($object && $date) {
+                    // Berechne bereits vermietete Menge für diesen Tag
+                    $alreadyRented = 0;
+                    $otherOrders = $entityManager->getRepository(\App\Entity\Order::class)->createQueryBuilder('o')
+                        ->join('o.appointment_id', 'a')
+                        ->where('o.object_id = :obj')
+                        ->andWhere('a.date = :date')
+                        ->andWhere('a.deactivated = false')
+                        ->andWhere('a.id != :currentId')
+                        ->setParameter('obj', $object)
+                        ->setParameter('date', $date)
+                        ->setParameter('currentId', $appointment->getId() ?? 0)
+                        ->getQuery()
+                        ->getResult();
+                    
+                    foreach ($otherOrders as $otherOrder) {
+                        $alreadyRented += $otherOrder->getAmount();
+                    }
+                    
+                    $available = $object->getAvailableAmount() - $alreadyRented;
+                    
+                    if ($requestedAmount > $available) {
+                        $this->addFlash('danger', sprintf(
+                            'Objekt "%s" ist am %s nicht ausreichend verfügbar. Vorhanden: %d, Bereits vermietet: %d, Verfügbar: %d.',
+                            $object->getName(),
+                            $date->format('d.m.Y'),
+                            $object->getAvailableAmount(),
+                            $alreadyRented,
+                            $available
+                        ));
+                        return $this->render('appointments/new.html.twig', [
+                            'appointment' => $appointment,
+                            'form' => $form,
+                        ]);
+                    }
+                }
+                
+                // Setze redundante Daten in Order (für Abwärtskompatibilität / einfacheren Zugriff)
+                if ($appointment->getCustomer()) {
+                    $order->setCustomerId($appointment->getCustomer());
+                }
+                if ($appointment->getLocation()) {
+                    $order->setLocationId($appointment->getLocation());
                 }
             }
 
@@ -71,10 +129,11 @@ final class AppointmentsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_appointments_show', methods: ['GET'])]
-    public function show(Appointments $appointment): Response
+    public function show(Appointments $appointment, \App\Repository\ChecklistTemplateRepository $checklistTemplateRepository): Response
     {
         return $this->render('appointments/show.html.twig', [
             'appointment' => $appointment,
+            'checklist_templates' => $checklistTemplateRepository->findAll(),
         ]);
     }
 
@@ -86,6 +145,53 @@ final class AppointmentsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // --- Verfügbarkeitsprüfung für Objekte ---
+            $date = $appointment->getDate();
+            foreach ($appointment->getOrders() as $order) {
+                $object = $order->getObjectId();
+                $requestedAmount = $order->getAmount();
+                
+                if ($object && $date) {
+                    $alreadyRented = 0;
+                    $otherOrders = $entityManager->getRepository(\App\Entity\Order::class)->createQueryBuilder('o')
+                        ->join('o.appointment_id', 'a')
+                        ->where('o.object_id = :obj')
+                        ->andWhere('a.date = :date')
+                        ->andWhere('a.deactivated = false')
+                        ->andWhere('a.id != :currentId')
+                        ->setParameter('obj', $object)
+                        ->setParameter('date', $date)
+                        ->setParameter('currentId', $appointment->getId() ?? 0)
+                        ->getQuery()
+                        ->getResult();
+                    
+                    foreach ($otherOrders as $otherOrder) {
+                        $alreadyRented += $otherOrder->getAmount();
+                    }
+                    
+                    $available = $object->getAvailableAmount() - $alreadyRented;
+                    
+                    if ($requestedAmount > $available) {
+                        $this->addFlash('danger', sprintf(
+                            'Objekt "%s" ist am %s nicht ausreichend verfügbar. Vorhanden: %d, Bereits vermietet: %d, Verfügbar: %d.',
+                            $object->getName(),
+                            $date->format('d.m.Y'),
+                            $object->getAvailableAmount(),
+                            $alreadyRented,
+                            $available
+                        ));
+                        return $this->render('appointments/edit.html.twig', [
+                            'appointment' => $appointment,
+                            'form' => $form,
+                        ]);
+                    }
+                }
+                
+                // Setze redundante Daten in Order
+                $order->setCustomerId($appointment->getCustomer());
+                $order->setLocationId($appointment->getLocation());
+            }
+
             // Gleiches Prinzip wie in new():
             if (null === $appointment->getCustomer()) {
                 if ($newCustomer = $this->getSubmittedNewCustomer($form)) {
@@ -96,6 +202,14 @@ final class AppointmentsController extends AbstractController
 
             if (null === $appointment->getLocation()) {
                 if ($newLocation = $this->getSubmittedNewLocation($form)) {
+                    
+                    // Check for new Contact in Location form
+                    $newContact = $this->getSubmittedNewContactFromLocation($form);
+                    if ($newContact) {
+                        $entityManager->persist($newContact);
+                        $newLocation->setContactId($newContact);
+                    }
+
                     $entityManager->persist($newLocation);
                     $appointment->setLocation($newLocation);
                 }
@@ -147,6 +261,30 @@ final class AppointmentsController extends AbstractController
             if ($v !== null && $v !== '') { $allEmpty = false; break; }
         }
         return $allEmpty ? null : $c;
+    }
+
+    private function getSubmittedNewContactFromLocation(FormInterface $form): ?\App\Entity\Contacts
+    {
+        $contactForm = $form->get('location')->get('new_contact');
+        /** @var ?\App\Entity\Contacts $c */
+        $c = $contactForm->getData();
+        
+        if (!$c instanceof \App\Entity\Contacts) {
+            return null;
+        }
+
+        $vals = [
+            $c->getPrename(),
+            $c->getLastname(),
+            $c->getEmail(),
+            $c->getPhone(),
+        ];
+        $allEmpty = true;
+        foreach ($vals as $v) {
+            if ($v !== null && $v !== '') { $allEmpty = false; break; }
+        }
+        return $allEmpty ? null : $c;
+
     }
 
     private function getSubmittedNewLocation(FormInterface $form): ?Location

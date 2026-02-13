@@ -1,41 +1,84 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Location index{% endblock %}
-{% block header %}Locations{% endblock %}
+{% block title %}Locations | Brink VA{% endblock %}
+
 {% block body %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-map-marker-alt text-danger"></i>Locationverwaltung
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_location_new') }}" class="btn btn-danger btn-standard shadow-sm" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
+                <i class="fas fa-plus fa-sm text-white-50 me-2"></i> Neue Location
+            </a>
+        </div>
+    </div>
 
-
-<div class="table-container mt-4 mb-4">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name der Location</th>
-                <th>Strasse</th>
-                <th>Stadt</th>
-                <th>Notizen</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for location in locations %}
-            <tr>
-                <td>{{ location.locationName }}</td>
-                <td>{{ location.street }} {{ location.streetnr }}</td>
-                <td>{{ location.postal }} {{ location.city }}</td>
-                <td>{{ location.notes }}</td>
-                <td>
-                    <a class="special-link" href="{{ path('app_location_show', {'id': location.id}) }}">Anzeigen</a>
-                    <a class="special-link" href="{{ path('app_location_edit', {'id': location.id}) }}">Bearbeiten</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">Keine Einträge vorhanden</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="card data-card shadow mb-4">
+        <div class="card-header py-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <h6 class="m-0 font-weight-bold text-white">Alle Locations</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table data-table table-hover mb-0">
+                    <thead style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <tr>
+                            <th class="py-3 px-4 text-white">Name</th>
+                            <th class="py-3 text-white">Adresse</th>
+                            <th class="py-3 text-white">Stadt</th>
+                            <th class="py-3 text-white">Notizen</th>
+                            <th class="py-3 text-end px-4 text-white">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: #f8f9fc;">
+                    {% for location in locations %}
+                        <tr style="transition: all 0.2s ease;">
+                            <td class="py-3 px-4">
+                                <i class="fas fa-map-marker-alt me-2" style="color: #95a5a6;"></i>
+                                <strong>{{ location.locationName }}</strong>
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-road me-2" style="color: #95a5a6;"></i>
+                                {{ location.street }} {{ location.streetnr }}
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-city me-2" style="color: #95a5a6;"></i>
+                                {{ location.postal }} {{ location.city }}
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-sticky-note me-2" style="color: #95a5a6;"></i>
+                                {{ location.notes|default('-')|slice(0, 50) }}{% if location.notes|length > 50 %}...{% endif %}
+                            </td>
+                            <td class="text-end py-3 px-4">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_location_show', {'id': location.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;"
+                                       title="Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_location_edit', {'id': location.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;"
+                                       title="Bearbeiten">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5" style="background-color: #f8f9fc;">
+                                <i class="fas fa-map-marked-alt fa-3x mb-3 d-block" style="color: #d1d3e2;"></i>
+                                <p class="mb-0" style="color: #858796;">Keine Locations gefunden</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
-    <a class="special-link" href="{{ path('app_location_new') }}">Neu anlegen</a>
 {% endblock %}

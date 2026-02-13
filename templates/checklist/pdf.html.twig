@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { margin: 2cm; }
+        body { font-family: 'Helvetica', sans-serif; color: #333; line-height: 1.4; font-size: 11pt; }
+        .header { border-bottom: 2pt solid #4e73df; padding-bottom: 15px; margin-bottom: 30px; }
+        .logo-text { font-size: 18pt; font-weight: bold; color: #224abe; margin-bottom: 5px; }
+        .title { font-size: 14pt; color: #555; font-weight: normal; margin-top: 0; }
+        
+        .info-grid { width: 100%; margin-bottom: 40px; }
+        .info-grid td { vertical-align: top; padding: 4px 0; }
+        .info-label { font-weight: bold; color: #4e73df; width: 120px; text-transform: uppercase; font-size: 9pt; letter-spacing: 1px; }
+        .info-value { color: #333; }
+
+        .section-title { font-size: 12pt; font-weight: bold; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 20px; text-transform: uppercase; }
+        
+        .question-box { margin-bottom: 15px; padding: 12px 15px; background-color: #fcfcfc; border: 1px solid #eee; border-radius: 6px; }
+        .question-header { margin-bottom: 8px; }
+        .index { font-weight: bold; color: #4e73df; margin-right: 10px; }
+        .question-text { font-weight: bold; font-size: 11pt; color: #444; }
+        .answer-container { padding-left: 25px; border-top: 1px solid #f0f0f0; padding-top: 8px; margin-top: 5px; }
+        .answer-text { color: #222; font-style: normal; }
+        .no-answer { color: #999; font-style: italic; font-size: 10pt; }
+
+        .footer { position: fixed; bottom: -1cm; left: 0; right: 0; width: 100%; border-top: 1px solid #eee; padding-top: 10px; font-size: 8pt; color: #aaa; text-align: center; }
+        
+        .checkbox-checked { color: #2e7d32; font-weight: bold; }
+        .checkbox-unchecked { color: #c62828; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-text">BRINK VA</div>
+        <h1 class="title">Checkliste: {{ checklist.title }}</h1>
+    </div>
+
+    <table class="info-grid">
+        <tr>
+            <td class="info-label">Kunde:</td>
+            <td class="info-value">{{ checklist.appointment.customer ? checklist.appointment.customer.prename ~ ' ' ~ checklist.appointment.customer.lastname : 'N/A' }}</td>
+            <td class="info-label" style="padding-left: 20px;">Termin:</td>
+            <td class="info-value">{{ checklist.appointment.occasion }}</td>
+        </tr>
+        <tr>
+            <td class="info-label">Datum:</td>
+            <td class="info-value">{{ checklist.appointment.date|date('d.m.Y') }}</td>
+            <td class="info-label" style="padding-left: 20px;">Status:</td>
+            <td class="info-value">
+                {% if checklist.isCompleted %}
+                    Abgeschlossen am {{ checklist.completedAt|date('d.m.Y H:i') }}
+                {% else %}
+                    Offen / In Bearbeitung
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <div class="section-title">Fragen & Antworten</div>
+
+    <div class="questions-section">
+        {% for question in checklist.questions %}
+            <div class="question-box">
+                <div class="question-header">
+                    <span class="index">{{ loop.index }}</span>
+                    <span class="question-text">{{ question.questionText }}</span>
+                </div>
+                <div class="answer-container">
+                    {% if question.answer is same as(null) or question.answer is same as('') %}
+                        <span class="no-answer">Keine Angaben</span>
+                    {% else %}
+                        <div class="answer-text">
+                            {% if question.fieldType == 'checkbox' %}
+                                {% if question.answer == '1' %}
+                                    <span class="checkbox-checked">[X] Ja / Erledigt</span>
+                                {% else %}
+                                    <span class="checkbox-unchecked">[ ] Nein / Nicht erledigt</span>
+                                {% endif %}
+                            {% else %}
+                                {{ question.answer|nl2br }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="footer">
+        Brink VA - Veranstaltungstechnik | Diese Checkliste ist Bestandteil der Terminunterlagen | Erstellt: {{ "now"|date('d.m.Y H:i') }} | Seite 1 von 1
+    </div>
+</body>
+</html>

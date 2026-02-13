@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ checklist.title }} | Brink VA</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/76c5d28c5a.js" crossorigin="anonymous"></script>
+        <style>
+            body { 
+                background-color: #f0f2f5; 
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            }
+            .main-card { border-radius: 1.5rem; border: none; overflow: hidden; }
+            .card-header { 
+                background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); 
+                color: white; 
+                padding: 2.5rem 2rem;
+                border: none;
+                text-align: center;
+            }
+            .btn-primary { 
+                background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); 
+                border: none; 
+                padding: 1rem 2rem;
+                border-radius: 3rem;
+                font-weight: 600;
+                transition: transform 0.2s;
+            }
+            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(78, 115, 223, 0.2); }
+            .question-box {
+                background: white;
+                border-radius: 1rem;
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                border: 1px solid #e3e6f0;
+                transition: border-color 0.2s;
+            }
+            .question-box:focus-within {
+                border-color: #4e73df;
+                box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.05);
+            }
+            .form-control, .form-select {
+                border-radius: 0.75rem;
+                border: 1px solid #d1d3e2;
+                padding: 0.75rem 1rem;
+            }
+            .form-control:focus, .form-select:focus {
+                border-color: #4e73df;
+                box-shadow: none;
+            }
+            .form-check-input:checked {
+                background-color: #4e73df;
+                border-color: #4e73df;
+            }
+            .status-badge {
+                display: inline-block;
+                padding: 0.35rem 1rem;
+                border-radius: 2rem;
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                background: rgba(255,255,255,0.2);
+                margin-top: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="card main-card shadow-lg mb-4">
+                        <div class="card-header">
+                            <h2 class="h5 mb-1 opacity-75">Checkliste für Ihren Termin</h2>
+                            <h1 class="h2 mb-0 fw-bold">{{ checklist.title }}</h1>
+                            <div class="status-badge">
+                                <i class="fas fa-calendar-day me-2"></i> {{ checklist.appointment.date|date('d.m.Y') }}
+                            </div>
+                        </div>
+                        <div class="card-body p-4 p-md-5 bg-light">
+                            <p class="text-center text-muted mb-5">Vielen Dank, dass Sie sich kurz Zeit nehmen. Ihre Antworten helfen uns, alles perfekt vorzubereiten.</p>
+                            
+                            <form method="post">
+                                {% for question in checklist.questions %}
+                                    <div class="question-box shadow-sm">
+                                        <label class="form-label d-block fw-bold mb-3">
+                                            {{ question.questionText }}
+                                            {% if question.isRequired %}<span class="text-danger">*</span>{% endif %}
+                                        </label>
+                                        
+                                        {% if question.fieldType == 'text' %}
+                                            <input type="text" name="responses[{{ question.id }}]" class="form-control" value="{{ question.answer }}" placeholder="Ihre Antwort..." {% if question.isRequired %}required{% endif %}>
+                                        {% elseif question.fieldType == 'textarea' %}
+                                            <textarea name="responses[{{ question.id }}]" class="form-control" rows="4" placeholder="Ihre ausführliche Antwort..." {% if question.isRequired %}required{% endif %}>{{ question.answer }}</textarea>
+                                        {% elseif question.fieldType == 'select' %}
+                                            <select name="responses[{{ question.id }}]" class="form-select" {% if question.isRequired %}required{% endif %}>
+                                                <option value="">-- Bitte wählen --</option>
+                                                {% for option in question.fieldOptions|default([]) %}
+                                                    <option value="{{ option }}" {% if question.answer == option %}selected{% endif %}>{{ option }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% elseif question.fieldType == 'checkbox' %}
+                                            <div class="form-check form-switch ps-5 py-2">
+                                                <input type="checkbox" name="responses[{{ question.id }}]" class="form-check-input" value="1" {% if question.answer == '1' %}checked{% endif %} id="q_{{ question.id }}" style="width: 2.5em; height: 1.25em; margin-left: -3em;">
+                                                <label class="form-check-label ms-3 fw-medium" for="q_{{ question.id }}">Ja, erledigt / Einverstanden</label>
+                                            </div>
+                                        {% elseif question.fieldType == 'radio' %}
+                                            <div class="d-flex flex-column gap-2 mt-2">
+                                                {% for option in question.fieldOptions|default([]) %}
+                                                    <div class="form-check border rounded-3 p-3 bg-white">
+                                                        <input type="radio" name="responses[{{ question.id }}]" class="form-check-input ms-0 me-3" value="{{ option }}" {% if question.answer == option %}checked{% endif %} id="q_{{ question.id }}_{{ loop.index }}" {% if question.isRequired %}required{% endif %}>
+                                                        <label class="form-check-label w-100" for="q_{{ question.id }}_{{ loop.index }}">{{ option }}</label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+
+                                <div class="mt-5 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5 shadow w-100 w-md-auto">
+                                        <i class="fas fa-paper-plane me-2"></i> Formular jetzt absenden
+                                    </button>
+                                    <p class="text-muted small mt-3 italic"><i class="fas fa-lock me-1"></i> Ihre Daten werden sicher übertragen.</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4 text-muted small">
+                        &copy; {{ "now"|date("Y") }} <strong>Brink VA</strong>. Professionelle Veranstaltungstechnik.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

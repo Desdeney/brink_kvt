@@ -18,11 +18,11 @@ class Appointments
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: "appointments", cascade: ["persist"])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Customer $customer = null;
 
     #[ORM\ManyToOne(inversedBy: "appointments", cascade: ["persist"])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Location $location = null;
 
 
@@ -98,16 +98,40 @@ class Appointments
     /**
      * @var Collection<int, Order>
      */
-    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'appointment_id')]
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'appointment_id', orphanRemoval: true, cascade: ["persist"])]
     private Collection $orders;
+
+    #[ORM\OneToMany(mappedBy: 'appointment', targetEntity: Checklist::class, orphanRemoval: true)]
+    private Collection $checklists;
 
     #[ORM\Column(nullable: true)]
     private ?bool $deactivated = null;
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\OneToMany(targetEntity: AppointmentDocument::class, mappedBy: 'appointment', cascade: ['persist', 'remove'])]
+    private Collection $documents;
 
     public function __construct()
     {
         $this->orders = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->checklists = new ArrayCollection();
+        $this->token = bin2hex(random_bytes(16));
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -456,4 +480,31 @@ class Appointments
     }
 
 
+
+    public function getChecklists(): Collection
+    {
+        return $this->checklists;
+    }
+
+    public function addChecklist(Checklist $checklist): static
+    {
+        if (!$this->checklists->contains($checklist)) {
+            $this->checklists->add($checklist);
+            $checklist->setAppointment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChecklist(Checklist $checklist): static
+    {
+        if ($this->checklists->removeElement($checklist)) {
+            // set the owning side to null (unless already changed)
+            if ($checklist->getAppointment() === $this) {
+                $checklist->setAppointment(null);
+            }
+        }
+
+        return $this;
+    }
 }

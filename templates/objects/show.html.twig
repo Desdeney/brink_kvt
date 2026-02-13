@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Objekt-Details: {{ object.name }} | Brink VA{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-box text-warning"></i>Objekt-Details: {{ object.name }}
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_objects_index') }}" class="btn btn-outline-secondary btn-standard shadow-sm">
+                <i class="fas fa-arrow-left me-2"></i>Zurück zur Liste
+            </a>
+            <a href="{{ path('app_objects_edit', {'id': object.id}) }}" class="btn btn-primary btn-standard shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="fas fa-edit me-2"></i>Bearbeiten
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Info Card -->
+        <div class="col-lg-8">
+            <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px; overflow: hidden;">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border: none;">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-info-circle me-2"></i>Stammdaten & Details</h6>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="text-uppercase small fw-bold text-muted mb-1">Bezeichnung</label>
+                            <p class="h5 mb-0 text-gray-800">{{ object.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-uppercase small fw-bold text-muted mb-1">Marke / Hersteller</label>
+                            <p class="h5 mb-0 text-gray-800">{{ object.brand|default('-') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-uppercase small fw-bold text-muted mb-1">Modell</label>
+                            <p class="h5 mb-0 text-gray-800">{{ object.modell|default('-') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-uppercase small fw-bold text-muted mb-1">Seriennummer</label>
+                            <p class="h5 mb-0 text-gray-800"><code>{{ object.serial|default('-') }}</code></p>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <hr class="text-gray-200">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded-3 text-center shadow-sm">
+                                <label class="text-uppercase small fw-bold text-muted mb-1 d-block">Verfügbar</label>
+                                <span class="h4 mb-0 fw-bold text-primary">{{ object.availableAmount }}</span>
+                                <span class="text-muted small">Stück</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded-3 text-center shadow-sm">
+                                <label class="text-uppercase small fw-bold text-muted mb-1 d-block">Mietpreis</label>
+                                <span class="h4 mb-0 fw-bold text-success">{{ object.price|number_format(2, ',', '.') }} €</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Card -->
+            {% if object.notes %}
+                <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px;">
+                    <div class="card-body p-4">
+                        <h6 class="font-weight-bold text-gray-800 mb-3"><i class="fas fa-sticky-note me-2 text-warning"></i>Notizen / Bemerkungen</h6>
+                        <p class="text-muted mb-0" style="line-height: 1.6;">{{ object.notes }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar / Actions -->
+        <div class="col-lg-4">
+            <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px; border-left: 5px solid #e74a3b !important;">
+                <div class="card-body p-4">
+                    <h6 class="font-weight-bold text-danger mb-3"><i class="fas fa-trash-alt me-2"></i>Löschen</h6>
+                    <p class="text-muted small mb-3">Dieses Objekt wird dauerhaft aus dem Bestand entfernt. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+                    {{ include('objects/_delete_form.html.twig') }}
+                </div>
+            </div>
+            
+            <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                    <h6 class="font-weight-bold text-gray-800 mb-3"><i class="fas fa-history me-2 text-info"></i>System-Info</h6>
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted">Interne ID:</span>
+                        <span class="fw-bold">#{{ object.id }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

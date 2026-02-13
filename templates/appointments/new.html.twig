@@ -4,298 +4,537 @@
 {% block header %}Neuer Termin{% endblock %}
 
 {% block body %}
-    {{ form_start(form) }}
-    <div class="container-fluid mt-5">
-        <h2> Verantwortliche </h2>
-        <div class="row mb-4 mt-3">
-            <div class="col-md-6">
-                {{ form_widget(form.users) }}
-            </div>
-        </div>
-        <h2> Kundendaten </h2>
-        <div id="customerSelect" class="mb-5">
-        <div class="row">
-            <div class="col-md-3">
-                {{ form_label(form.customerSelect) }}
-                {{ form_widget(form.customerSelect) }}
-            </div>
-        </div>
-        <div class="row mt-3 mb-3">
-            <div class="col-sm-5 col-md-3">
-                <button id="newCustomer" type="button" class="btn btn-primary"><i class="fas fa-plus pe-2"></i>Neuen Kunden anlegen</button>
-            </div>
-        </div>
-        </div>
-        <div id="customerData" class="d-none mb-5">
-            <div class="row mb-4 mt-3">
-                <div class="col-md-3">
-                    {{ form_label(form.customer.prename) }}
-                    {{ form_widget(form.customer.prename) }}
-                </div>
-                <div class="col-md-3">
-                    {{ form_label(form.customer.lastname) }}
-                    {{ form_widget(form.customer.lastname) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-5">
-                    {{ form_label(form.customer.street) }}
-                    {{ form_widget(form.customer.street) }}
-                </div>
-                <div class="col-md-1">
-                    {{ form_label(form.customer.housenr) }}
-                    {{ form_widget(form.customer.housenr) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    {{ form_label(form.customer.postal) }}
-                    {{ form_widget(form.customer.postal) }}
-                </div>
-                <div class="col-md-3">
-                    {{ form_label(form.customer.city) }}
-                    {{ form_widget(form.customer.city) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    {{ form_label(form.customer.email) }}
-                    {{ form_widget(form.customer.email) }}
-                </div>
-                <div class="col-md-3">
-                    {{ form_label(form.customer.phone) }}
-                    {{ form_widget(form.customer.phone) }}
-                </div>
-            </div>
-            <div class="row mb-4 mt-2">
-                <div class="col-md-3">
-                    {{ form_label(form.customer.payment) }}
-                    {{ form_widget(form.customer.payment) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                    <span class="me-2">oder</span> <button id="changeToExistingCustomer" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehenden Kunden wählen</button>
-                </div>
-            </div>
-        </div>
-        <h2> Location Daten </h2>
-        <div id="locationSelect" class="mb-5">
-            <div class="row">
-                <div class="col-md-3">
-                    {{ form_label(form.locationSelect) }}
-                    {{ form_widget(form.locationSelect) }}
-                </div>
-            </div>
-            <div class="row mt-3 mb-3">
-                <div class="col-sm-5 col-md-3">
-                    <button id="newLocation" type="button" class="btn btn-primary"><i class="fas fa-plus pe-2"></i>Neue Location anlegen</button>
-                </div>
-            </div>
-        </div>
-        <div id="locationData" class="mb-5 d-none">
-            <div class="row mb-4 mt-3">
-                <div class="col-md-6">
-                    {{ form_label(form.location.location_name) }}
-                    {{ form_widget(form.location.location_name) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    {{ form_label(form.location.contact_id) }}
-                    {{ form_widget(form.location.contact_id) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-5">
-                    {{ form_label(form.location.street) }}
-                    {{ form_widget(form.location.street) }}
-                </div>
-                <div class="col-md-1">
-                    {{ form_label(form.location.streetnr) }}
-                    {{ form_widget(form.location.streetnr) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    {{ form_label(form.location.postal) }}
-                    {{ form_widget(form.location.postal) }}
-                </div>
-                <div class="col-md-3">
-                    {{ form_label(form.location.city) }}
-                    {{ form_widget(form.location.city) }}
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    {{ form_label(form.location.notes) }}
-                    {{ form_widget(form.location.notes) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-                    <span class="me-2">oder</span> <button id="changeToExistingLocation" type="button" class="btn btn-primary"><i class="fas fa-magnifying-glass pe-2"></i>Bestehende Location wählen</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="my-5"></div>
-        <h2> Allgemeine Daten zum Termin </h2>
-        <div class="row mb-4 mt-3">
-            <div class="col-md-6">
-                {{ form_label(form.occasion) }}
-                {{ form_widget(form.occasion) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.date) }}
-                {{ form_widget(form.date) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.start_time) }}
-                {{ form_widget(form.start_time) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.end_time) }}
-                {{ form_widget(form.end_time) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {{ form_label(form.is_confirmed) }}
-                {{ form_widget(form.is_confirmed) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.setup_with_location) }}
-                {{ form_widget(form.setup_with_location) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.teardown_with_location) }}
-                {{ form_widget(form.teardown_with_location) }}
-            </div>
-        </div>
-        <div id="setup_fields" class="row mb-4 d-none">
-            <div class="col-md-3">
-                {{ form_label(form.setup_date) }}
-                {{ form_widget(form.setup_date) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.setup_time) }}
-                {{ form_widget(form.setup_time) }}
-            </div>
-        </div>
-        <div id="teardown_fields" class="row mb-4 d-none">
-            <div class="col-md-3">
-                {{ form_label(form.teardown_date) }}
-                {{ form_widget(form.teardown_date) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.teardown_time) }}
-                {{ form_widget(form.teardown_time) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.attendees_count) }}
-                {{ form_widget(form.attendees_count) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.attendees_age_from) }}
-                {{ form_widget(form.attendees_age_from) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.attendees_age_to) }}
-                {{ form_widget(form.attendees_age_to) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {{ form_label(form.attendees_notes) }}
-                {{ form_widget(form.attendees_notes) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {{ form_label(form.dj_notes) }}
-                {{ form_widget(form.dj_notes) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                {{ form_label(form.price_dj_hour) }}
-                {{ form_widget(form.price_dj_hour) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.price_dj_extention) }}
-                {{ form_widget(form.price_dj_extention) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.price_approach) }}
-                {{ form_widget(form.price_approach) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_label(form.price_tech) }}
-                {{ form_widget(form.price_tech) }}
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary">Speichern</button>
-                <a href="{{ path('app_appointments_index') }}">
-                    <button type="button" class="btn btn-primary">Zurück zur Liste</button>
-                </a>
-            </div>
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-calendar-plus text-primary"></i>Neuer Termin
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_appointments_index') }}" class="btn btn-outline-secondary btn-standard shadow-sm">
+                <i class="fas fa-arrow-left me-2"></i>Zurück zur Liste
+            </a>
         </div>
     </div>
-    {{ form_row(form._token) }}
-    {{ form_errors(form) }}
-    {{ form_end(form, { 'render_rest': false }) }}
 
+    {{ form_start(form) }}
+
+        
+        <!-- Progress Indicator -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="text-center flex-fill">
+                                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                                     style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i class="fas fa-users text-white"></i>
+                                </div>
+                                <div class="small fw-bold" style="color: #667eea;">Verantwortliche</div>
+                            </div>
+                            <div class="flex-fill" style="height: 2px; background: linear-gradient(90deg, #667eea 0%, #11998e 100%);"></div>
+                            <div class="text-center flex-fill">
+                                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                                     style="width: 40px; height: 40px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div class="small fw-bold" style="color: #11998e;">Kunde</div>
+                            </div>
+                            <div class="flex-fill" style="height: 2px; background: linear-gradient(90deg, #11998e 0%, #f093fb 100%);"></div>
+                            <div class="text-center flex-fill">
+                                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                                     style="width: 40px; height: 40px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                    <i class="fas fa-map-marker-alt text-white"></i>
+                                </div>
+                                <div class="small fw-bold" style="color: #f093fb;">Location</div>
+                            </div>
+                            <div class="flex-fill" style="height: 2px; background: linear-gradient(90deg, #f093fb 0%, #fda085 100%);"></div>
+                            <div class="text-center flex-fill">
+                                <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                                     style="width: 40px; height: 40px; background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+                                    <i class="fas fa-calendar-check text-white"></i>
+                                </div>
+                                <div class="small fw-bold" style="color: #fda085;">Details</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verantwortliche Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-card shadow mb-4">
+                    <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h6 class="m-0 font-weight-bold text-white d-flex align-items-center">
+                            <i class="fas fa-users me-2"></i>
+                            Verantwortliche
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{ form_widget(form.users, {'attr': {'class': 'form-check-input-lg'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kundendaten Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-card shadow mb-4">
+                    <div class="card-header py-3" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        <h6 class="m-0 font-weight-bold text-white d-flex align-items-center">
+                            <i class="fas fa-user me-2"></i>
+                            Kundendaten
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="customerSelect">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_label(form.customerSelect, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customerSelect, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button id="newCustomer" type="button" class="btn shadow-sm" 
+                                            style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none;">
+                                        <i class="fas fa-plus me-2"></i>Neuen Kunden anlegen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="customerData" class="d-none">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    {{ form_label(form.customer.prename, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.prename, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Vorname eingeben'}}) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_label(form.customer.lastname, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.lastname, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Nachname eingeben'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-8">
+                                    {{ form_label(form.customer.street, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.street, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Straße eingeben'}}) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_label(form.customer.housenr, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.housenr, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Nr.'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    {{ form_label(form.customer.postal, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.postal, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'PLZ'}}) }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form_label(form.customer.city, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.city, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Stadt eingeben'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    {{ form_label(form.customer.email, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.email, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'email@beispiel.de'}}) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_label(form.customer.phone, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.phone, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '+49 123 456789'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    {{ form_label(form.customer.payment, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.customer.payment, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button id="changeToExistingCustomer" type="button" class="btn btn-outline-secondary">
+                                        <i class="fas fa-search me-2"></i>Bestehenden Kunden wählen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Daten Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-card shadow mb-4">
+                    <div class="card-header py-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h6 class="m-0 font-weight-bold text-white d-flex align-items-center">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            Location Daten
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="locationSelect">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_label(form.locationSelect, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.locationSelect, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button id="newLocation" type="button" class="btn shadow-sm" 
+                                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
+                                        <i class="fas fa-plus me-2"></i>Neue Location anlegen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="locationData" class="d-none">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    {{ form_label(form.location.location_name, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.location_name, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Location Name eingeben'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    {{ form_label(form.location.contact_id, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.contact_id, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                </div>
+                            </div>
+                            
+                            {# Button zum Anlegen einer neuen Kontaktperson #}
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <button id="toggleNewContact" type="button" class="btn btn-sm" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
+                                        <i class="fas fa-plus me-2"></i>Neue Kontaktperson anlegen
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {# Felder für neue Kontaktperson (initial versteckt) #}
+                            <div id="newContactFields" class="d-none">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        {{ form_label(form.location.new_contact.prename, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                        {{ form_widget(form.location.new_contact.prename, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_label(form.location.new_contact.lastname, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                        {{ form_widget(form.location.new_contact.lastname, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        {{ form_label(form.location.new_contact.email, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                        {{ form_widget(form.location.new_contact.email, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form_label(form.location.new_contact.phone, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                        {{ form_widget(form.location.new_contact.phone, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-8">
+                                    {{ form_label(form.location.street, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.street, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Straße eingeben'}}) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_label(form.location.streetnr, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.streetnr, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Nr.'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    {{ form_label(form.location.postal, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.postal, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'PLZ'}}) }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form_label(form.location.city, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.city, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Stadt eingeben'}}) }}
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    {{ form_label(form.location.notes, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                    {{ form_widget(form.location.notes, {'attr': {'class': 'form-control form-control-lg', 'rows': '3', 'placeholder': 'Notizen zur Location...'}}) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button id="changeToExistingLocation" type="button" class="btn btn-outline-secondary">
+                                        <i class="fas fa-search me-2"></i>Bestehende Location wählen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Allgemeine Daten zum Termin Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-card shadow mb-4">
+                    <div class="card-header py-3" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+                        <h6 class="m-0 font-weight-bold text-white d-flex align-items-center">
+                            <i class="fas fa-calendar-check me-2"></i>
+                            Allgemeine Daten zum Termin
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Anlass -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                {{ form_label(form.occasion, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.occasion, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'z.B. Hochzeit, Geburtstag, Firmenfeier...'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Datum und Zeiten -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                {{ form_label(form.date, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_label(form.start_time, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.start_time, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_label(form.end_time, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.end_time, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    {{ form_widget(form.is_confirmed, {'attr': {'class': 'form-check-input form-check-input-lg', 'role': 'switch'}}) }}
+                                    <label class="form-check-label fw-bold ms-2">
+                                        {{ form_label(form.is_confirmed) }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Auf-/Abbau -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    {{ form_widget(form.setup_with_location, {'attr': {'class': 'form-check-input form-check-input-lg', 'role': 'switch'}}) }}
+                                    <label class="form-check-label fw-bold ms-2">
+                                        {{ form_label(form.setup_with_location) }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    {{ form_widget(form.teardown_with_location, {'attr': {'class': 'form-check-input form-check-input-lg', 'role': 'switch'}}) }}
+                                    <label class="form-check-label fw-bold ms-2">
+                                        {{ form_label(form.teardown_with_location) }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Setup Fields (conditional) -->
+                        <div id="setup_fields" class="row g-3 mb-3 d-none">
+                            <div class="col-md-6">
+                                {{ form_label(form.setup_date, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.setup_date, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.setup_time, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.setup_time, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Teardown Fields (conditional) -->
+                        <div id="teardown_fields" class="row g-3 mb-4 d-none">
+                            <div class="col-md-6">
+                                {{ form_label(form.teardown_date, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.teardown_date, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.teardown_time, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.teardown_time, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Teilnehmer -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                {{ form_label(form.attendees_count, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.attendees_count, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Anzahl'}}) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_label(form.attendees_age_from, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.attendees_age_from, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Von'}}) }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form_label(form.attendees_age_to, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.attendees_age_to, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Bis'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Notizen -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                                {{ form_label(form.attendees_notes, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.attendees_notes, {'attr': {'class': 'form-control form-control-lg', 'rows': '3', 'placeholder': 'Besondere Hinweise zu den Teilnehmern...'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                {{ form_label(form.dj_notes, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.dj_notes, {'attr': {'class': 'form-control form-control-lg', 'rows': '3', 'placeholder': 'DJ-Notizen, Musikwünsche, besondere Anforderungen...'}}) }}
+                            </div>
+                        </div>
+
+                        <!-- Preise -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                {{ form_label(form.price_dj_hour, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.price_dj_hour, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '0.00'}}) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_label(form.price_dj_extention, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.price_dj_extention, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '0.00'}}) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_label(form.price_approach, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.price_approach, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '0.00'}}) }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form_label(form.price_tech, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                                {{ form_widget(form.price_tech, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '0.00'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mietgegenstände Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-card shadow mb-4">
+                    <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h6 class="m-0 font-weight-bold text-white d-flex align-items-center">
+                            <i class="fas fa-boxes me-2"></i>
+                            Mietgegenstände / Objekte
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="order-fields-list" 
+                             data-prototype="{{ '<div class="row g-3"><div class="col-md-8">' ~ form_widget(form.orders.vars.prototype.object_id, {'attr': {'class': 'form-select form-select-lg'}}) ~ '</div><div class="col-md-3">' ~ form_widget(form.orders.vars.prototype.amount, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Anzahl'}}) ~ '</div></div>' | e('html_attr') }}"
+                             data-widget-tags="{{ '<div class="order-item mb-3 p-3 border rounded-3 bg-light position-relative"></div>'|e('html_attr') }}"
+                             data-widget-counter="{{ form.orders|length }}">
+                            {% for orderField in form.orders %}
+                                <div class="order-item mb-3 p-3 border rounded-3 bg-light position-relative">
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            {{ form_widget(orderField.object_id, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form_widget(orderField.amount, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-item" style="border-radius: 8px;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success add-another-collection-widget mt-2" data-list-selector="#order-fields-list" style="border-radius: 10px;">
+                            <i class="fas fa-plus me-1"></i> Objekt hinzufügen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card data-card shadow">
+                    <div class="card-body d-flex justify-content-between align-items-center py-4 px-4">
+                        <a href="{{ path('app_appointments_index') }}" class="btn btn-outline-secondary btn-standard">
+                            <i class="fas fa-arrow-left me-2"></i>Zurück zur Liste
+                        </a>
+                        <button type="submit" class="btn btn-standard shadow-sm px-5 py-3" 
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; font-weight: bold;">
+                            <i class="fas fa-save me-2"></i>Termin speichern
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ form_row(form._token) }}
+        {{ form_errors(form) }}
+        {{ form_end(form, { 'render_rest': false }) }}
 
     <script>
-        //Buttons
+        // Buttons
         const newCustomerButton = document.getElementById('newCustomer');
         const changeToExistingCustomerButton = document.getElementById('changeToExistingCustomer');
         const newLocationButton = document.getElementById('newLocation');
         const changeToExistingLocationButton = document.getElementById('changeToExistingLocation');
 
-        //Areas
+        // Areas
         const customerSelect = document.getElementById('customerSelect');
         const customerData = document.getElementById('customerData');
         const locationSelect = document.getElementById('locationSelect');
         const locationData = document.getElementById('locationData');
 
-        //Event Listeners
+        // Event Listeners
         newCustomerButton.addEventListener('click', function(){
             customerSelect.classList.add('d-none');
-            newCustomerButton.classList.add('d-none');
             customerData.classList.remove('d-none');
         })
 
         newLocationButton.addEventListener('click', function (){
             locationSelect.classList.add('d-none');
-            newLocationButton.classList.add('d-none');
             locationData.classList.remove('d-none');
         })
 
         changeToExistingLocationButton.addEventListener('click', function (){
             locationData.classList.add('d-none');
             locationSelect.classList.remove('d-none');
-            newLocationButton.classList.remove('d-none');
         })
 
         changeToExistingCustomerButton.addEventListener('click', function (){
             customerData.classList.add('d-none');
             customerSelect.classList.remove('d-none');
-            newCustomerButton.classList.remove('d-none');
+        })
 
+        // Toggle für neue Kontaktperson
+        const toggleNewContactButton = document.getElementById('toggleNewContact');
+        const newContactFields = document.getElementById('newContactFields');
+        
+        toggleNewContactButton.addEventListener('click', function() {
+            if (newContactFields.classList.contains('d-none')) {
+                newContactFields.classList.remove('d-none');
+                toggleNewContactButton.innerHTML = '<i class="fas fa-minus me-2"></i>Kontaktperson-Felder ausblenden';
+            } else {
+                newContactFields.classList.add('d-none');
+                toggleNewContactButton.innerHTML = '<i class="fas fa-plus me-2"></i>Neue Kontaktperson anlegen';
+            }
         })
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -315,17 +554,50 @@
             function toggleTeardownFields() {
                 if (checkbox_teardown.checked) {
                     teardownFields.classList.add("d-none");
-                } else {teardownFields.classList.remove("d-none");
+                } else {
+                    teardownFields.classList.remove("d-none");
                 }
             }
 
-            // Initial prüfen beim Laden
+            // Initial check on load
             toggleSetupFields();
             toggleTeardownFields()
 
-            // Bei Änderung aktualisieren
+            // Update on change
             checkbox_setup.addEventListener("change", toggleSetupFields);
             checkbox_teardown.addEventListener("change", toggleTeardownFields);
+
+            // Objects Collection JS
+            const list = document.querySelector('#order-fields-list');
+            const addButton = document.querySelector('.add-another-collection-widget');
+            
+            addButton.addEventListener('click', function(e) {
+                const counter = parseInt(list.dataset.widgetCounter);
+                const prototype = list.dataset.prototype;
+                const tags = list.dataset.widgetTags;
+                
+                const newWidget = prototype.replace(/__name__/g, counter);
+                list.dataset.widgetCounter = counter + 1;
+                
+                const container = document.createElement('div');
+                container.innerHTML = tags;
+                const item = container.firstElementChild;
+                item.innerHTML = newWidget;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-item';
+                removeBtn.style.borderRadius = '8px';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+                removeBtn.onclick = function() { item.remove(); };
+                
+                item.appendChild(removeBtn);
+                list.appendChild(item);
+            });
+
+            list.querySelectorAll('.remove-item').forEach(btn => {
+                btn.onclick = function() { btn.closest('.order-item').remove(); };
+            });
         });
     </script>
 {% endblock %}

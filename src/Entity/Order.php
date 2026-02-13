@@ -25,12 +25,27 @@ class Order
     private ?Location $location_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Customer $customer_id = null;
+
+    #[ORM\Column]
+    private ?int $amount = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAmount(): ?int
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(int $amount): static
+    {
+        $this->amount = $amount;
+
+        return $this;
     }
 
     public function getObjectId(): ?Objects

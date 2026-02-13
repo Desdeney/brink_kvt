@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ihre Veranstaltung{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Ihre Veranstaltung: {{ appointment.occasion }}</h1>
+        <p class="lead">Hier finden Sie alle Details zu Ihrem Termin.</p>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Details
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Datum</dt>
+                    <dd class="col-sm-9">{{ appointment.date ? appointment.date|date('d.m.Y') : '' }}</dd>
+
+                    <dt class="col-sm-3">Startzeit</dt>
+                    <dd class="col-sm-9">{{ appointment.startTime ? appointment.startTime|date('H:i') : '' }}</dd>
+
+                    <dt class="col-sm-3">Endzeit</dt>
+                    <dd class="col-sm-9">{{ appointment.endTime ? appointment.endTime|date('H:i') : '' }}</dd>
+
+                    <dt class="col-sm-3">Status</dt>
+                    <dd class="col-sm-9">
+                        {% if appointment.isConfirmed %}
+                            <span class="badge bg-success">Bestätigt</span>
+                        {% else %}
+                            <span class="badge bg-warning">Ausstehend</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        {# Placeholder for Music Questionnaire and Documents #}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Musikwünsche
+                    </div>
+                    <div class="card-body">
+                        <p>Hier können Sie uns Ihre Musikwünsche mitteilen.</p>
+                        <a href="{{ path('app_customer_music_questionnaire', {'token': appointment.token}) }}" class="btn btn-primary">Fragebogen starten</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Dokumente
+                    </div>
+                    <div class="card-body">
+                        <p>Hier können Sie Dokumente hochladen.</p>
+                        <a href="{{ path('app_customer_documents', {'token': appointment.token}) }}" class="btn btn-primary">Dokumente verwalten</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,53 +1,100 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Customer index{% endblock %}
+{% block title %}Kundenübersicht - Brink VA{% endblock %}
 
 {% block body %}
-    <h1>Customer index</h1>
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-users text-primary"></i>Kundenverwaltung
+        </h1>
+        <a href="{{ path('app_customer_new') }}" class="btn btn-primary btn-standard shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-plus fa-sm text-white-50 me-2"></i> Neuer Kunde
+        </a>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Prename</th>
-                <th>Lastname</th>
-                <th>Street</th>
-                <th>Housenr</th>
-                <th>Postal</th>
-                <th>City</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Require_cash</th>
-                <th>Require_prepaid</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for customer in customers %}
-            <tr>
-                <td>{{ customer.id }}</td>
-                <td>{{ customer.prename }}</td>
-                <td>{{ customer.lastname }}</td>
-                <td>{{ customer.street }}</td>
-                <td>{{ customer.housenr }}</td>
-                <td>{{ customer.postal }}</td>
-                <td>{{ customer.city }}</td>
-                <td>{{ customer.email }}</td>
-                <td>{{ customer.phone }}</td>
-                <td>{{ customer.requireCash ? 'Yes' : 'No' }}</td>
-                <td>{{ customer.requirePrepaid ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_customer_show', {'id': customer.id}) }}">show</a>
-                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_customer_new') }}">Create new</a>
+    <div class="card data-card shadow-lg mb-4">
+        <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-list me-2"></i>Alle Kunden</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table data-table table-hover mb-0" id="customerTable" width="100%" cellspacing="0">
+                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <tr>
+                            <th class="py-3 px-4 text-white">Name</th>
+                            <th class="py-3 text-white">Stadt</th>
+                            <th class="py-3 text-white">E-Mail</th>
+                            <th class="py-3 text-white">Telefon</th>
+                            <th class="py-3 text-center text-white">Zahlung</th>
+                            <th class="py-3 text-end px-4 text-white">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: #f8f9fc;">
+                    {% for customer in customers %}
+                        <tr style="transition: all 0.2s ease;">
+                            <td class="py-3 px-4" style="color: #2c3e50;">
+                                <i class="fas fa-user-circle me-2" style="color: #95a5a6;"></i>
+                                <strong>{{ customer.prename }} {{ customer.lastname }}</strong>
+                            </td>
+                            <td class="py-3" style="color: #5a6c7d;">
+                                <i class="fas fa-map-marker-alt me-2 small" style="color: #95a5a6;"></i>{{ customer.city }}
+                            </td>
+                            <td class="py-3" style="color: #5a6c7d;">
+                                <i class="fas fa-envelope me-2 small" style="color: #95a5a6;"></i>{{ customer.email }}
+                            </td>
+                            <td class="py-3" style="color: #5a6c7d;">
+                                <i class="fas fa-phone me-2 small" style="color: #95a5a6;"></i>{{ customer.phone }}
+                            </td>
+                            <td class="text-center py-3">
+                                {% if customer.requireCash %}
+                                    <span class="badge rounded-pill" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-money-bill-wave me-1"></i>Bar
+                                    </span>
+                                {% endif %}
+                                {% if customer.requirePrepaid %}
+                                    <span class="badge rounded-pill" style="background: linear-gradient(135deg, #36d1dc 0%, #5b86e5 100%); color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-credit-card me-1"></i>Vorkasse
+                                    </span>
+                                {% endif %}
+                                {% if not customer.requireCash and not customer.requirePrepaid %}
+                                    <span class="badge rounded-pill" style="background: #6c757d; color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-check me-1"></i>Standard
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end py-3 px-4">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_customer_show', {'id': customer.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;"
+                                       title="Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;"
+                                       title="Bearbeiten">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5" style="background-color: #f8f9fc;">
+                                <i class="fas fa-users fa-3x mb-3 d-block" style="color: #d1d3e2;"></i>
+                                <p class="mb-0" style="color: #858796;">Keine Kunden gefunden</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Floating Action Button -->
+    <a href="{{ path('app_customer_new') }}" class="btn btn-primary rounded-circle d-sm-none position-fixed shadow" style="bottom: 20px; right: 20px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; z-index: 1050;">
+        <i class="fas fa-plus"></i>
+    </a>
 {% endblock %}

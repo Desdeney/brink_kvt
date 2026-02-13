@@ -3,44 +3,62 @@
 {% block title %}Location{% endblock %}
 
 {% block body %}
-    <h1>Location</h1>
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-map-marker-alt text-danger"></i>Location: {{ location.locationName }}
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_location_index') }}" class="btn btn-outline-secondary btn-standard shadow-sm">
+                <i class="fas fa-arrow-left me-2"></i>Zurück zur Liste
+            </a>
+            <a href="{{ path('app_location_edit', {'id': location.id}) }}" class="btn btn-primary btn-standard shadow-sm" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <i class="fas fa-edit me-2"></i>Bearbeiten
+            </a>
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ location.id }}</td>
-            </tr>
-            <tr>
-                <th>Location_name</th>
-                <td>{{ location.locationName }}</td>
-            </tr>
-            <tr>
-                <th>Street</th>
-                <td>{{ location.street }}</td>
-            </tr>
-            <tr>
-                <th>Streetnr</th>
-                <td>{{ location.streetnr }}</td>
-            </tr>
-            <tr>
-                <th>Postal</th>
-                <td>{{ location.postal }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ location.city }}</td>
-            </tr>
-            <tr>
-                <th>Notes</th>
-                <td>{{ location.notes }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_location_index') }}">back to list</a>
-
-    <a href="{{ path('app_location_edit', {'id': location.id}) }}">edit</a>
-
-    {{ include('location/_delete_form.html.twig') }}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-info-circle me-2"></i>Stammdaten</h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table data-table mb-0">
+                        <tbody>
+                            <tr>
+                                <th width="30%">Name</th>
+                                <td><strong>{{ location.locationName }}</strong></td>
+                            </tr>
+                            <tr>
+                                <th>Anschrift</th>
+                                <td>
+                                    {{ location.street }} {{ location.streetnr }}<br>
+                                    {{ location.postal }} {{ location.city }}
+                                </td>
+                            </tr>
+                            {% if location.notes %}
+                            <tr>
+                                <th>Notizen / Hausregeln</th>
+                                <td>{{ location.notes|nl2br }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3 bg-light">
+                    <h6 class="m-0 font-weight-bold text-gray-800"><i class="fas fa-trash-alt me-2 text-danger"></i>Gefahrenbereich</h6>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted mb-3">Das Löschen einer Location kann nicht rückgängig gemacht werden.</p>
+                    {{ include('location/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

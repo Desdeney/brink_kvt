@@ -1,70 +1,26 @@
-{# templates/navigation.html.twig #}
-<nav id="sidebarMenu" class="nav-width d-none sidebar shadow-lg">
-    <div id="sidebar-control" class="p-3">
-        <i class="sidebar-btn-white p-1 fas fa-times"></i>
-    </div>
-    <div id="sidebar" class="sidebar-sticky pt-3">
-            <img class="ms-3 mb-3" src="{{ asset('img/LogoWeiss.png') }}" width="55%"/>
+<div class="border-end bg-white" id="sidebar-wrapper">
+    <div class="sidebar-heading border-bottom bg-light">Brink VA</div>
+    <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_dashboard' %}active{% endif %}" href="{{ path('app_dashboard') }}">
+            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
         </a>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link{% if app.request.attributes.get('_route') == 'app_home' %} active{% endif %}"
-                   href="{{ path('app_home') }}">
-                    <div class="row">
-                        <div class="col-1"><i class="fas fa-home pe-1"></i></div>
-                        <div class="col-1">Startseite</div>
-                    </div>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link{% if app.request.attributes.get('_route') == 'app_customer_index' %} active{% endif %}"
-                   href="{{ path('app_customer_index') }}">
-                    <div class="row">
-                        <div class="col-1"><i class="fas fa-user-group pe-1"></i></div>
-                        <div class="col-1">Kunden</div>
-                    </div>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link{% if app.request.attributes.get('_route') == 'app_location_index' %} active{% endif %}"
-                   href="{{ path('app_location_index') }}">
-                    <div class="row">
-                        <div class="col-1"><i class="fas fa-map-marker-alt pe-1"></i></div>
-                        <div class="col-1">Locations</div>
-                    </div>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link{% if app.request.attributes.get('_route') == 'app_appointments_index' %} active{% endif %}"
-                   href="{{ path('app_appointments_index') }}">
-                    <div class="row">
-                        <div class="col-1"><i class="fas fa-calendar pe-1"></i></div>
-                        <div class="col-1">Veranstaltungen</div>
-                    </div>
-                </a>
-                {% if app.request.attributes.get('_route') matches '/^app_appointments/' %}
-                <a class="nav-link{% if app.request.attributes.get('_route') == 'app_appointments_new' %} active{% endif %}"
-                   href="{{ path('app_appointments_new') }}">
-                    <div class="row">
-                        <div class="offset-1"><i class="fas fa-plus pe-1"></i> Anlegen</div>
-                    </div>
-                </a>
-                {% endif %}
-            </li>
-        </ul>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_customer_index' %}active{% endif %}" href="{{ path('app_customer_index') }}">
+            <i class="fas fa-users me-2"></i> Kunden
+        </a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_appointments_index' %}active{% endif %}" href="{{ path('app_appointments_index') }}">
+            <i class="fas fa-calendar-alt me-2"></i> Veranstaltungen
+        </a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_objects_index' %}active{% endif %}" href="{{ path('app_objects_index') }}">
+            <i class="fas fa-box me-2"></i> Objekte
+        </a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_location_index' %}active{% endif %}" href="{{ path('app_location_index') }}">
+            <i class="fas fa-map-marker-alt me-2"></i> Locations
+        </a>
+         <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_user_index' %}active{% endif %}" href="{{ path('app_user_index') }}">
+            <i class="fas fa-user-shield me-2"></i> Benutzer
+        </a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if 'settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_settings') }}">
+            <i class="fas fa-cog me-2"></i> Einstellungen
+        </a>
     </div>
-</nav>
-
-<script>
-    const navControl = document.getElementById('sidebar-control');
-    const sidebar = document.getElementById('sidebarMenu');
-    const showSidebarBtn = document.getElementById('showSidebarBtn');
-
-    showSidebarBtn.addEventListener('click', function (){
-        sidebar.classList.remove('d-none');
-    })
-
-    navControl.addEventListener('click', function (){
-        sidebar.classList.add('d-none');
-    })
-</script>
+</div>

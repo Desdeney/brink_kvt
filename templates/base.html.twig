@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Brink VA{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
@@ -13,65 +13,152 @@
             {{ encore_entry_script_tags('app') }}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             <script src="https://kit.fontawesome.com/76c5d28c5a.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         {% endblock %}
     </head>
     <body>
-    <div class="row w-50 p-3">
-        <div id="sidebarControls">
-            <i id="showSidebarBtn" class="sidebar-btn p-1 fas fa-bars"></i>
-        </div>
-    </div>
-    <div class="container-fluid my-5">
-        <div class="row">
+    
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        {% if app.user %}
             {% include 'navigation.html.twig' %}
-
-            <main class="col-md-9 col-lg-10 px-md-4 w-xl-75">
-                <div id="title-bar">
-                    <div class="row d-flex justify-content-between">
-                        <div class="col-6">
-                            <h1>{% block header %}Brink Veranstaltungstechnik{% endblock %}</h1>
-                        </div>
-                        <div class="col-6 d-flex justify-content-end">
-                            {% block usercontrols %}
-                            <div class="usercontrols d-flex align-items-center">
-                                <i class="text-danger fas fa-truck-loading pe-2"></i>
-                                <i class="text-primary fas fa-cog pe-2"></i>
-                                <i class="text-primary fas fa-search pe-2"></i>
-                                <i class="text-primary fas fa-sign-out-alt pe-2"></i>
-                                <img src="{{ asset('img/avatar.png') }}" width="32px">
-                            </div>
-                            {% endblock %}
-                        </div>
+        {% endif %}
+        
+        <!-- Page Content -->
+        <div id="page-content-wrapper" class="w-100">
+            {% if app.user %}
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom px-4 py-3">
+                    <button class="btn btn-primary" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+    
+                    <div class="ms-auto d-flex align-items-center">
+                         <div class="me-3 d-none d-md-block">
+                            <span class="text-gray-600 small">{{ app.user.fullName }}</span>
+                         </div>
+                         <div class="dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="avatar-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem;">
+                                    {{ app.user.prename|first|upper }}{{ app.user.lastname|first|upper }}
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px;">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2 text-muted"></i> Profil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Abmelden</a></li>
+                            </ul>
+                         </div>
                     </div>
-                </div>
-                {% block body %}
-                {% endblock %}
-            </main>
+                </nav>
+            {% endif %}
+
+            <div class="container-fluid {% if app.user %}py-4{% endif %}">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success shadow-sm" style="border-radius: 12px;">
+                        <i class="fas fa-check-circle me-2"></i> {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger shadow-sm" style="border-radius: 12px;">
+                        <i class="fas fa-exclamation-triangle me-2"></i> {{ message }}
+                    </div>
+                {% endfor %}
+                
+                {% block body %}{% endblock %}
+            </div>
         </div>
     </div>
-    </body>
 
+    <script>
+        window.addEventListener('DOMContentLoaded', event => {
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+        });
+    </script>
+    </body>
 </html>
 
 {% block styles %}
     <style>
-        body {
+        #wrapper {
             overflow-x: hidden;
+            display: flex;
         }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 1rem 0;
-            box-shadow: inset -1px 0 0 rgba(0,0,0,.1);
-        }
-        .sidebar-sticky {
-            height: calc(100vh - 48px);
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
+    width: 15rem;
+    background-color: #ffffff !important;
+    border-right: 1px solid #e3e6f0 !important;
+    z-index: 1000;
+}
+
+#sidebar-wrapper .list-group-item {
+    border: none !important;
+    border-right: 1px solid #e3e6f0 !important;
+    padding: 1rem 1.5rem !important;
+    font-weight: 600;
+    color: #858796;
+    background-color: transparent !important;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+    color: #4e73df;
+    background-color: #f8f9fc !important;
+}
+
+#sidebar-wrapper .list-group-item.active {
+    color: #4e73df !important;
+    background-color: #f8f9fc !important;
+    border-left: 4px solid #4e73df !important;
+    border-right: 1px solid #e3e6f0 !important;
+}
+
+#sidebar-wrapper .sidebar-heading {
+    padding: 1.5rem 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #4e73df;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    border-bottom: 1px solid #e3e6f0;
+    border-right: 1px solid #e3e6f0;
+}
+
+#page-content-wrapper {
+    min-width: 100vw;
+}
+
+body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
+        margin-left: -15rem;
+    }
+}
+
+
     </style>
 {% endblock %}
 

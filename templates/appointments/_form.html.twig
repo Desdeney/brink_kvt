@@ -1,4 +1,143 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Speichern') }}</button>
+    <div class="row g-4">
+        <!-- Stammdaten -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4 border-0" style="border-radius: 15px;">
+                <div class="card-header bg-white py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-calendar-alt me-2"></i>Veranstaltungsdetails</h6>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            {{ form_label(form.occasion, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.occasion, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'z.B. Hochzeit Müller'}}) }}
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            {{ form_label(form.customerSelect, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.customerSelect, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            {{ form_label(form.locationSelect, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.locationSelect, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            {{ form_label(form.date, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.date, {'attr': {'class': 'd-flex gap-1'}}) }}
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            {{ form_label(form.start_time, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.start_time, {'attr': {'class': 'd-flex gap-1'}}) }}
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            {{ form_label(form.end_time, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.end_time, {'attr': {'class': 'd-flex gap-1'}}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mietgegenstände (Dynamic Collection) -->
+            <div class="card shadow-sm mb-4 border-0" style="border-radius: 15px;">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-boxes me-2"></i>Mietgegenstände / Objekte</h6>
+                    <button type="button" class="btn btn-sm btn-success add-another-collection-widget" data-list-selector="#order-fields-list" style="border-radius: 10px;">
+                        <i class="fas fa-plus me-1"></i> Objekt hinzufügen
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div id="order-fields-list" 
+                         data-prototype="{{ form_widget(form.orders.vars.prototype)|e }}"
+                         data-widget-tags="{{ '<div class="order-item mb-3 p-3 border rounded-3 bg-light position-relative"></div>'|e }}"
+                         data-widget-counter="{{ form.orders|length }}">
+                        {% for orderField in form.orders %}
+                            <div class="order-item mb-3 p-3 border rounded-3 bg-light position-relative">
+                                {{ form_widget(orderField) }}
+                                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-item" style="border-radius: 8px;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar / Details -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4 border-0" style="border-radius: 15px;">
+                <div class="card-header bg-white py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-info-circle me-2"></i>Optionen & Status</h6>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        {{ form_widget(form.is_confirmed) }}
+                        {{ form_label(form.is_confirmed, null, {'label_attr': {'class': 'form-check-label ms-2 fw-bold'}}) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_label(form.attendees_count, null, {'label_attr': {'class': 'form-label small fw-bold text-muted text-uppercase'}}) }}
+                        {{ form_widget(form.attendees_count, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <hr>
+                    <div class="mt-4">
+                        <button class="btn btn-primary btn-lg w-100 shadow" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px;">
+                            <i class="fas fa-save me-2"></i> {{ button_label|default('Termin speichern') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden original logic segments if needed, but we keep it clean -->
+    <div style="display:none">
+        {{ form_rest(form) }}
+    </div>
 {{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const list = document.querySelector('#order-fields-list');
+    const addButton = document.querySelector('.add-another-collection-widget');
+    
+    addButton.addEventListener('click', function(e) {
+        const counter = list.dataset.widgetCounter;
+        const prototype = list.dataset.prototype;
+        const tags = list.dataset.widgetTags;
+        
+        const newWidget = prototype.replace(/__name__/g, counter);
+        list.dataset.widgetCounter = parseInt(counter) + 1;
+        
+        const container = document.createElement('div');
+        container.innerHTML = tags;
+        const item = container.firstElementChild;
+        item.innerHTML = newWidget;
+        
+        // Add Remove Button
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-2 remove-item';
+        removeBtn.style.borderRadius = '8px';
+        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        removeBtn.onclick = function() { item.remove(); };
+        
+        item.appendChild(removeBtn);
+        list.appendChild(item);
+    });
+
+    list.querySelectorAll('.remove-item').forEach(btn => {
+        btn.onclick = function() { btn.closest('.order-item').remove(); };
+    });
+});
+</script>
+
+<style>
+    .order-item > div {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+    .order-item .mb-3 {
+        margin-bottom: 0 !important;
+        flex: 1;
+    }
+</style>

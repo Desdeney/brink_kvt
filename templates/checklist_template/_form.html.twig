@@ -1,0 +1,93 @@
+{{ form_start(form) }}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Allgemeine Informationen</h6>
+        </div>
+        <div class="card-body">
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Fragen</h6>
+            <button type="button" class="btn btn-success btn-sm add-question" data-collection-holder-class="questions">
+                <i class="fas fa-plus me-2"></i> Frage hinzufügen
+            </button>
+        </div>
+        <div class="card-body">
+            <ul class="list-group questions"
+                data-index="{{ form.questions|length > 0 ? form.questions|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.questions.vars.prototype)|e('html_attr') }}">
+                {% for question in form.questions %}
+                    <li class="list-group-item mb-3 border rounded shadow-sm p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary">Frage {{ loop.index }}</span>
+                            <button type="button" class="btn btn-danger btn-sm remove-question">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        {{ form_row(question.questionText) }}
+                        <div class="row">
+                            <div class="col-md-6">{{ form_row(question.fieldType) }}</div>
+                            <div class="col-md-3">{{ form_row(question.position) }}</div>
+                            <div class="col-md-3 mt-4">{{ form_row(question.isRequired) }}</div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <button class="btn btn-primary shadow">{{ button_label|default('Speichern') }}</button>
+        <a href="{{ path('app_checklist_template_index') }}" class="btn btn-secondary shadow ms-2">Abbrechen</a>
+    </div>
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const addQuestionButton = document.querySelector('.add-question');
+    const collectionHolder = document.querySelector('.questions');
+
+    addQuestionButton.addEventListener('click', (e) => {
+        const item = document.createElement('li');
+        item.className = 'list-group-item mb-3 border rounded shadow-sm p-3';
+        
+        const index = collectionHolder.dataset.index;
+        let prototype = collectionHolder.dataset.prototype;
+        prototype = prototype.replace(/__name__/g, index);
+        
+        item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-primary">Neue Frage</span>
+                <button type="button" class="btn btn-danger btn-sm remove-question">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            ${prototype}
+        `;
+
+        collectionHolder.appendChild(item);
+        collectionHolder.dataset.index++;
+        
+        // Setup remove button for the new element
+        item.querySelector('.remove-question').addEventListener('click', () => {
+            item.remove();
+        });
+    });
+
+    // Setup remove buttons for existing elements
+    document.querySelectorAll('.remove-question').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.currentTarget.closest('li').remove();
+        });
+    });
+});
+</script>
+
+<style>
+    .questions { list-style: none; padding: 0; }
+    .questions .form-group { margin-bottom: 1rem; }
+</style>

@@ -1,11 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Location{% endblock %}
+{% block title %}Neue Location | Brink VA{% endblock %}
 
 {% block body %}
-    <h1>Create new Location</h1>
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-map-marker-alt text-danger"></i>Neue Location anlegen
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_location_index') }}" class="btn btn-outline-secondary btn-standard shadow-sm">
+                <i class="fas fa-arrow-left me-2"></i>Zurück zur Liste
+            </a>
+        </div>
+    </div>
 
-    {{ include('location/_form.html.twig') }}
-
-    <a href="{{ path('app_location_index') }}">back to list</a>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card data-card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border: none;">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-plus-circle me-2"></i>Standortinformationen</h6>
+                </div>
+                <div class="card-body p-4">
+                    {{ include('location/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

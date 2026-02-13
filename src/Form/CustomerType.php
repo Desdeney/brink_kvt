@@ -22,21 +22,21 @@ class CustomerType extends AbstractType
             ->add('city', null, ['label' => 'Ort', 'attr' => ['placeholder' => 'Musterstadt']])
             ->add('email', null, ['label' => 'E-Mail', 'attr' => ['placeholder' => 'mail@example.com']])
             ->add('phone', null, ['label' => 'Telefon', 'attr' => ['placeholder' => '012345678901']])
-            ->add('require_cash', null, ['label' => 'Barzahlung erforderlich', 'data' => false])
-            ->add('require_prepaid', null, ['label' => 'Vorkasse erforderlich', 'data' => false])
-            ->add('payment', EntityType::class, [
-                'class' => Payment::class,
-                'choice_value' => 'id',
-                'choice_label' => 'name',
-                'label' => 'Zahlungsart',
-            ])
-        ;
+            ->add('require_cash', null, ['label' => 'Barzahlung erforderlich'])
+            ->add('require_prepaid', null, ['label' => 'Vorkasse erforderlich'])
+            ->add('payment', EntityType::class , [
+            'class' => Payment::class ,
+            'choice_value' => 'id',
+            'choice_label' => 'name',
+            'label' => 'Zahlungsart',
+        ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Customer::class,
+            'data_class' => Customer::class ,
         ]);
     }
 }

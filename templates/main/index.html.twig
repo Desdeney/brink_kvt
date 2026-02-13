@@ -16,7 +16,39 @@
             padding: 2px 6px;
         }
     </style>
-    <div class="current_user" style="display:flex; align-items:center;">
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .dashboard-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+            transition: transform 0.2s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .dashboard-card h3 {
+            margin-bottom: 15px;
+        }
+        .dashboard-card a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .name {
+            font-weight: bold;
+        }
+    </style>
+
+    <div class="current_user" style="display:flex; align-items:center; margin-bottom: 30px;">
         <img src="{{ asset('img/avatar.png') }}"
              alt="avatar"
              width="64"
@@ -36,11 +68,38 @@
         </div>
     </div>
 
-    <style>
-        .name {
-            font-weight: bold;
-        }
-
-    </style>
+    <div class="dashboard-container">
+        <div class="dashboard-card">
+            <a href="{{ path('app_user_index') }}">
+                <h3>Benutzer verwalten</h3>
+                <p>Nutzer anlegen, bearbeiten und sperren</p>
+            </a>
+        </div>
+        <div class="dashboard-card">
+            <a href="{{ path('app_objects_index') }}">
+                <h3>Objekte verwalten</h3>
+                <p>Verleihgegenstände und Inventar</p>
+            </a>
+        </div>
+        {# Assume paths exist for these based on file list #}
+        <div class="dashboard-card">
+            <a href="/customer">
+                <h3>Kunden</h3>
+                <p>Kundenstamm pflegen</p>
+            </a>
+        </div>
+        <div class="dashboard-card">
+            <a href="/appointments">
+                <h3>Termine</h3>
+                <p>Kalender und Terminübersicht</p>
+            </a>
+        </div>
+        <div class="dashboard-card">
+            <a href="/location">
+                <h3>Locations</h3>
+                <p>Veranstaltungsorte verwalten</p>
+            </a>
+        </div>
+    </div>
 
 {% endblock %}

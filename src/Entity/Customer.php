@@ -8,9 +8,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class Customer
 {
+    use SoftDeleteableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -53,7 +58,7 @@ class Customer
     /**
      * @var Collection<int, Appointments>
      */
-    #[ORM\OneToMany(targetEntity: Appointments::class, mappedBy: 'customer_id')]
+    #[ORM\OneToMany(targetEntity: Appointments::class, mappedBy: 'customer')]
     private Collection $appointments;
 
     /**
@@ -218,7 +223,7 @@ class Customer
     {
         if (!$this->appointments->contains($appointment)) {
             $this->appointments->add($appointment);
-            $appointment->setCustomerId($this);
+            $appointment->setCustomer($this);
         }
 
         return $this;
@@ -228,8 +233,8 @@ class Customer
     {
         if ($this->appointments->removeElement($appointment)) {
             // set the owning side to null (unless already changed)
-            if ($appointment->getCustomerId() === $this) {
-                $appointment->setCustomerId(null);
+            if ($appointment->getCustomer() === $this) {
+                $appointment->setCustomer(null);
             }
         }
 

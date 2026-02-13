@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_checklist_template_delete', {'id': checklist_template.id}) }}" onsubmit="return confirm('Soll dieses Template wirklich gelöscht werden?');" style="display:inline-block;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ checklist_template.id) }}">
+    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+</form>

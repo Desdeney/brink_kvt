@@ -1,0 +1,281 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard | Brink VA{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1 class="mb-4">Dashboard</h1>
+    
+    <div class="row mb-4">
+        <!-- KPI Cards -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow h-100" style="border-left: 4px solid #667eea;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #667eea;">
+                                Veranstaltungen (Kommend)</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color: #2c3e50;">{{ upcoming_appointments_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x" style="color: #d1d3e2;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow h-100" style="border-left: 4px solid #11998e;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #11998e;">
+                                Kunden (Gesamt)</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color: #2c3e50;">{{ customers_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x" style="color: #d1d3e2;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow h-100" style="border-left: 4px solid #f093fb;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #f093fb;">Locations</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color: #2c3e50;">{{ locations_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-map-marker-alt fa-2x" style="color: #d1d3e2;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card shadow h-100" style="border-left: 4px solid #f6d365;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #f6d365;">Objekte</div>
+                            <div class="h5 mb-0 font-weight-bold" style="color: #2c3e50;">{{ objects_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-box fa-2x" style="color: #d1d3e2;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Current Appointments List -->
+              <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h6 class="m-0 font-weight-bold" style="color: #000;">Aktuelle Termine (ab heute)</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <tr>
+                                    <th class="py-3 px-3" style="color: #000;">Anlass</th>
+                                    <th class="py-3" style="color: #000;">Kunde</th>
+                                    <th class="py-3" style="color: #000;">Location</th>
+                                    <th class="py-3" style="color: #000;">Datum</th>
+                                    <th class="py-3" style="color: #000;">Uhrzeit</th>
+                                    <th class="py-3" style="color: #000;">Status</th>
+                                    <th class="py-3 text-end" style="color: #000;">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody style="background-color: #f8f9fc;">
+                            {% if current_appointments is empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4" style="color: #858796;">
+                                        <i class="fas fa-calendar-times fa-2x mb-2"></i><br>
+                                        Keine aktuellen Termine vorhanden
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for appointment in current_appointments %}
+                                    <tr style="border-bottom: 1px solid #e3e6f0;">
+                                        <td class="py-3 px-3">
+                                            <i class="fas fa-star me-2" style="color: #f6c23e;"></i>
+                                            <strong>{{ appointment.occasion|default('Unbenannt') }}</strong>
+                                        </td>
+                                        <td class="py-3">
+                                            <i class="fas fa-user me-2" style="color: #95a5a6;"></i>
+                                            {{ appointment.customer ? appointment.customer.prename ~ ' ' ~ appointment.customer.lastname : '-' }}
+                                        </td>
+                                        <td class="py-3">
+                                            <i class="fas fa-map-marker-alt me-2" style="color: #95a5a6;"></i>
+                                            {{ appointment.location ? appointment.location.locationName : '-' }}
+                                        </td>
+                                        <td class="py-3">
+                                            <i class="fas fa-calendar me-2" style="color: #95a5a6;"></i>
+                                            {{ appointment.date ? appointment.date|date('d.m.Y') : '-' }}
+                                        </td>
+                                        <td class="py-3">
+                                            <i class="fas fa-clock me-2" style="color: #95a5a6;"></i>
+                                            {{ appointment.startTime ? appointment.startTime|date('H:i') : '-' }}
+                                        </td>
+                                        <td class="py-3">
+                                            {% if appointment.getIsConfirmed() %}
+                                                <span class="badge" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
+                                                    <i class="fas fa-check-circle me-1"></i>Bestätigt
+                                                </span>
+                                            {% else %}
+                                                <span class="badge" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white;">
+                                                    <i class="fas fa-hourglass-half me-1"></i>Offen
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-end py-3 px-3">
+                                            <a href="{{ path('app_appointments_show', {'id': appointment.id}) }}" 
+                                               class="btn btn-sm shadow-sm me-1" 
+                                               style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ path('app_appointments_edit', {'id': appointment.id}) }}" 
+                                               class="btn btn-sm shadow-sm" 
+                                               style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Overview Tables Row -->
+    <div class="row">
+        <!-- Recent Customers -->
+        <div class="col-xl-4 col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <h6 class="m-0 font-weight-bold text-white">Neueste Kunden</h6>
+                    <a href="{{ path('app_customer_index') }}" class="btn btn-sm btn-light py-0 px-2" style="font-size: 0.75rem; border-radius: 5px;">
+                        <i class="fas fa-list me-1"></i>Zur Liste
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <tbody style="background-color: #f8f9fc;">
+                            {% for customer in recent_customers %}
+                                <tr style="border-bottom: 1px solid #e3e6f0;">
+                                    <td class="py-3 px-3">
+                                        <i class="fas fa-user-circle me-2" style="color: #95a5a6;"></i>
+                                        <strong>{{ customer.prename }} {{ customer.lastname }}</strong>
+                                        <br>
+                                        <small style="color: #858796;">{{ customer.city }}</small>
+                                    </td>
+                                    <td class="text-end py-3 px-3">
+                                        <a href="{{ path('app_customer_show', {'id': customer.id}) }}" 
+                                           class="btn btn-sm shadow-sm" 
+                                           style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none;">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Locations -->
+        <div class="col-xl-4 col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <h6 class="m-0 font-weight-bold text-white">Neueste Locations</h6>
+                    <a href="{{ path('app_location_index') }}" class="btn btn-sm btn-light py-0 px-2" style="font-size: 0.75rem; border-radius: 5px;">
+                        <i class="fas fa-list me-1"></i>Zur Liste
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <tbody style="background-color: #f8f9fc;">
+                            {% for location in recent_locations %}
+                                <tr style="border-bottom: 1px solid #e3e6f0;">
+                                    <td class="py-3 px-3">
+                                        <i class="fas fa-map-marker-alt me-2" style="color: #95a5a6;"></i>
+                                        <strong>{{ location.locationName }}</strong>
+                                        <br>
+                                        <small style="color: #858796;">{{ location.city }}</small>
+                                    </td>
+                                    <td class="text-end py-3 px-3">
+                                        <a href="{{ path('app_location_show', {'id': location.id}) }}" 
+                                           class="btn btn-sm shadow-sm" 
+                                           style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Checklists -->
+        <div class="col-xl-4 col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+                    <h6 class="m-0 font-weight-bold text-white">Neueste Checklisten</h6>
+                    <a href="{{ path('app_appointments_index') }}" class="btn btn-sm btn-light py-0 px-2" style="font-size: 0.75rem; border-radius: 5px;">
+                        <i class="fas fa-list me-1"></i>Zu den Terminen
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <tbody style="background-color: #f8f9fc;">
+                            {% for checklist in recent_checklists %}
+                                <tr style="border-bottom: 1px solid #e3e6f0;">
+                                    <td class="py-3 px-3">
+                                        <i class="fas fa-tasks me-2" style="color: #95a5a6;"></i>
+                                        <strong>{{ checklist.title }}</strong>
+                                        <br>
+                                        <small style="color: #858796;">Für: {{ checklist.appointment.occasion|default('Unbenannt') }}</small>
+                                    </td>
+                                    <td class="text-end py-3 px-3">
+                                        <a href="{{ path('app_checklist_show', {'id': checklist.id}) }}" 
+                                           class="btn btn-sm shadow-sm" 
+                                           style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; border: none;">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="2" class="text-center py-4 text-muted">Keine Checklisten vorhanden</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

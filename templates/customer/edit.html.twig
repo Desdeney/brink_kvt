@@ -1,13 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Customer{% endblock %}
+{% block title %}Kunde bearbeiten - Brink VA{% endblock %}
 
 {% block body %}
-    <h1>Edit Customer</h1>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Kunde bearbeiten</h1>
+        <div>
+            <a href="{{ path('app_customer_index') }}" class="btn btn-sm btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Zurück
+            </a>
+            <a href="{{ path('app_customer_show', {'id': customer.id}) }}" class="btn btn-sm btn-info shadow-sm ms-2 text-white">
+                <i class="fas fa-eye fa-sm text-white-50"></i> Details anzeigen
+            </a>
+        </div>
+    </div>
 
-    {{ include('customer/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_customer_index') }}">back to list</a>
-
-    {{ include('customer/_delete_form.html.twig') }}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px; overflow: hidden;">
+                <div class="card-header py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-user-edit me-2"></i>Stammdaten: {{ customer.prename }} {{ customer.lastname }}</h6>
+                </div>
+                <div class="card-body">
+                    {{ include('customer/_form.html.twig', {'button_label': 'Änderungen speichern'}) }}
+                </div>
+            </div>
+            
+            <div class="card shadow-lg mb-4 border-0" style="border-radius: 15px; overflow: hidden; border-left: 5px solid #e74a3b !important;">
+                <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div>
+                        <h6 class="font-weight-bold text-danger mb-2"><i class="fas fa-exclamation-triangle me-2"></i>Gefahrenzone</h6>
+                        <p class="text-muted small mb-0">Das Löschen eines Kunden kann nicht rückgängig gemacht werden. Alle verknüpften Daten gehen verloren.</p>
+                    </div>
+                    {{ include('customer/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

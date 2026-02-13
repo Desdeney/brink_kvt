@@ -1,0 +1,46 @@
+{{ form_start(form) }}
+    <div class="row g-4">
+        <div class="col-md-12 mb-3">
+            {{ form_label(form.name, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.name) }}
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.brand, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.brand) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.modell, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.modell) }}
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.serial, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.serial) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.available_amount, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.available_amount) }}
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.price, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.price) }}
+        </div>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-12 mb-3">
+            {{ form_label(form.notes, null, {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.notes) }}
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-end">
+        <button class="btn btn-primary btn-lg px-5 shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px;">
+            <i class="fas fa-save me-2"></i> {{ button_label|default('Objekt speichern') }}
+        </button>
+    </div>
+{{ form_end(form) }}

@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Objekte | Brink VA{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-box text-warning"></i>Objektverwaltung
+        </h1>
+        <div class="page-actions">
+            <a href="{{ path('app_objects_new') }}" class="btn btn-warning btn-standard shadow-sm" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; border: none;">
+                <i class="fas fa-plus fa-sm text-white-50 me-2"></i> Neues Objekt
+            </a>
+        </div>
+    </div>
+
+    <div class="card data-card shadow mb-4">
+        <div class="card-header py-3" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+            <h6 class="m-0 font-weight-bold text-white">Alle Objekte</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table data-table table-hover mb-0">
+                    <thead style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+                        <tr>
+                            <th class="py-3 px-4 text-white">Name</th>
+                            <th class="py-3 text-white">Marke</th>
+                            <th class="py-3 text-white">Modell</th>
+                            <th class="py-3 text-white">Seriennummer</th>
+                            <th class="py-3 text-center text-white">Verfügbar</th>
+                            <th class="py-3 text-end text-white">Preis</th>
+                            <th class="py-3 text-end px-4 text-white">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: #f8f9fc;">
+                    {% for object in objects %}
+                        <tr style="transition: all 0.2s ease;">
+                            <td class="py-3 px-4">
+                                <i class="fas fa-box me-2" style="color: #95a5a6;"></i>
+                                <strong>{{ object.name }}</strong>
+                            </td>
+                            <td class="py-3">
+                                <i class="fas fa-tag me-2" style="color: #95a5a6;"></i>
+                                {{ object.brand|default('-') }}
+                            </td>
+                            <td class="py-3">
+                                {{ object.modell|default('-') }}
+                            </td>
+                            <td class="py-3">
+                                <small class="text-muted">{{ object.serial|default('-') }}</small>
+                            </td>
+                            <td class="text-center py-3">
+                                {% if object.availableAmount > 0 %}
+                                    <span class="badge rounded-pill" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-check me-1"></i>{{ object.availableAmount }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill" style="background: #6c757d; color: #fff; padding: 0.4rem 0.8rem;">
+                                        <i class="fas fa-times me-1"></i>0
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end py-3">
+                                <strong>{{ object.price ? (object.price|number_format(2, ',', '.') ~ ' €') : '-' }}</strong>
+                            </td>
+                            <td class="text-end py-3 px-4">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('app_objects_show', {'id': object.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; border: none;"
+                                       title="Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_objects_edit', {'id': object.id}) }}" 
+                                       class="btn btn-sm shadow-sm" 
+                                       style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;"
+                                       title="Bearbeiten">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5" style="background-color: #f8f9fc;">
+                                <i class="fas fa-box-open fa-3x mb-3 d-block" style="color: #d1d3e2;"></i>
+                                <p class="mb-0" style="color: #858796;">Keine Objekte gefunden</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
