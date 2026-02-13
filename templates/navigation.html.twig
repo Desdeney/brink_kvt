@@ -16,7 +16,7 @@
         <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_location_index' %}active{% endif %}" href="{{ path('app_location_index') }}">
             <i class="fas fa-map-marker-alt me-2"></i> Locations
         </a>
-         <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_user_index' %}active{% endif %}" href="{{ path('app_user_index') }}">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if app.request.attributes.get('_route') == 'app_user_index' %}active{% endif %}" href="{{ path('app_user_index') }}">
             <i class="fas fa-user-shield me-2"></i> Benutzer
         </a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3 {% if 'settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ path('app_settings') }}">
